@@ -49,7 +49,7 @@ Table Mahasiswa {
   user User [not null]
   userId String [unique, not null]
   NIM String [unique, not null]
-  jumlah_poin Int [not null]
+  jumlah_poin Int [not null, default: 0]
   Transaksi_Poin Transaksi_Poin [not null]
   Nilai Nilai [not null]
   Jawaban_Tugas Jawaban_Tugas [not null]

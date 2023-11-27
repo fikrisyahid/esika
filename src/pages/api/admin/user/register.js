@@ -41,9 +41,31 @@ export default async function handler(req, res) {
     });
 
     if (role === "mahasiswa") {
+      let NIM = "";
+
+      const latestNIM = await prisma.mahasiswa.findFirst({
+        orderBy: {
+          NIM: "desc",
+        },
+      });
+
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth() + 1;
+      const currentDay = new Date().getDate();
+
+      if (!latestNIM) {
+        NIM = `${currentYear}${currentMonth}${currentDay}001`;
+      }
+      if (latestNIM) {
+        const latestNIMNumber = parseInt(latestNIM.NIM.slice(-3));
+        const currentNIMNumber = latestNIMNumber + 1;
+        NIM = `${currentYear}${currentMonth}${currentDay}${currentNIMNumber}`;
+      }
+
       await prisma.mahasiswa.create({
         data: {
           userId: result.id,
+          NIM,
         },
       });
     }

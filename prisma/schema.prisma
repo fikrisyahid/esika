@@ -61,7 +61,7 @@ model Mahasiswa {
   user              User                @relation(fields: [userId], references: [id])
   userId            String              @unique
   NIM               String              @unique
-  jumlah_poin       Int
+  jumlah_poin       Int                 @default(0)
   Transaksi_Poin    Transaksi_Poin[]
   Nilai             Nilai[]
   Jawaban_Tugas     Jawaban_Tugas[]
