@@ -7,8 +7,8 @@ This app was made for fun and to apply what I've learn so far (code readibility,
 ## How to access
 
 Deployment links:
-- [Production deployment](https://esika.vercel.app/)
-- [Dev deployment](https://esika-dev.vercel.app/)
+- [Production deployment](https://esika-rpl.vercel.app/)
+- [Dev deployment](https://esika-rpl-dev.vercel.app/)
 
 ## How to run
 
