@@ -114,10 +114,10 @@ export default function Index() {
             fw="bolder"
             style={{ fontSize: 50 }}
           >
-            Elzaki
+            Esika
           </Title>
           <Text color="white" align="center" fw="lighter" size="lg">
-            English E-Learning for Junior High School
+            E-Learning app for students
           </Text>
           <form
             onSubmit={handleSignIn}
