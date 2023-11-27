@@ -17,7 +17,9 @@ export default function NotificationLists({ data, unread }) {
 
   const NoNotification = (
     <Center p={theme.spacing.md}>
-      <Text size="sm" color="gray">You do not have any notification</Text>
+      <Text size="sm" color="gray">
+        You do not have any notification
+      </Text>
     </Center>
   );
 
@@ -39,7 +41,7 @@ export default function NotificationLists({ data, unread }) {
             style={{ padding: theme.spacing.sm }}
           >
             <Group position="apart">
-              <Text size="sm">{item.title}</Text>
+              <Text size="sm">{item.judul}</Text>
               {unread && (
                 <Tooltip label="Mark as read" position="left">
                   <ActionIcon color="blue">
@@ -48,7 +50,7 @@ export default function NotificationLists({ data, unread }) {
                 </Tooltip>
               )}
             </Group>
-            <Text size="xs">{item.description}</Text>
+            <Text size="xs">{item.isi}</Text>
           </MainCard>
         ))}
       </Stack>
