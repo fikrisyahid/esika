@@ -1,5 +1,4 @@
 E-learning app made with Next JS.
-Currently only support 1 subject, that is english.
 
 This app was made for fun and to apply what I've learn so far (code readibility, modularize, DRY, etc).
 
@@ -8,12 +7,12 @@ This app was made for fun and to apply what I've learn so far (code readibility,
 ## How to access
 
 Deployment links:
-- [Production deployment](https://elzaki.vercel.app/)
-- [Dev deployment](https://elzaki-dev.vercel.app/)
+- [Production deployment](https://esika.vercel.app/)
+- [Dev deployment](https://esika-dev.vercel.app/)
 
 ## How to run
 
-1. Clone repo `git clone https://github.com/fikrisyahid/elearning-react.git`
+1. Clone repo `git clone https://github.com/fikrisyahid/esika.git`
 2. Install dependencies `yarn` or `npm install`
 3. Generate prisma db `npx prisma generate`
 4. Run `yarn dev` or `npm run dev`
