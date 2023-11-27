@@ -6,7 +6,7 @@ import NotificationLists from "./NotificationLists";
 
 export default function NotificationMenu({ user }) {
   const { data: notification } = useFetchAPI({
-    url: `${SHARED_API_URL}/notification/get?user_id=${user?.data?.id}`,
+    url: `${SHARED_API_URL}/notification?user_id=${user?.data?.id}`,
   });
 
   return (
