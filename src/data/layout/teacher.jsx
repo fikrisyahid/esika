@@ -1,10 +1,9 @@
 import {
   IconLayoutDashboard,
   IconListNumbers,
-  IconMessages,
   IconMilitaryAward,
   IconNotebook,
-  IconUser,
+  IconNotes,
 } from "@tabler/icons-react";
 
 const teacherNavLists = [
@@ -15,8 +14,8 @@ const teacherNavLists = [
   },
   {
     icon: <IconNotebook />,
-    label: "Course",
-    link: "/teacher/course",
+    label: "Kelas",
+    link: "/teacher/kelas",
   },
   {
     icon: <IconListNumbers />,
@@ -25,18 +24,13 @@ const teacherNavLists = [
   },
   {
     icon: <IconMilitaryAward />,
-    label: "Leaderboard",
-    link: "/teacher/leaderboard",
+    label: "Challenge",
+    link: "/teacher/challenge",
   },
   {
-    icon: <IconMessages />,
-    label: "Forum",
-    link: "/teacher/forum",
-  },
-  {
-    icon: <IconUser />,
-    label: "Student",
-    link: "/teacher/student",
+    icon: <IconNotes />,
+    label: "Ujian",
+    link: "/teacher/ujian",
   },
 ];
 

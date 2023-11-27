@@ -2,11 +2,11 @@ import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
 import { Text } from "@mantine/core";
 
-export default function Leaderboard() {
+export default function Challenge() {
   return (
-    <PageWrapper pageTitle="Leaderboard">
+    <PageWrapper pageTitle="Challenge">
       <MainCard>
-        <Text>Ini halaman leaderboard masih kosong</Text>
+        <Text>Contoh teks</Text>
       </MainCard>
     </PageWrapper>
   );
