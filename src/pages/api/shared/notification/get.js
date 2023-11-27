@@ -15,14 +15,14 @@ export default async function handler(req, res) {
       throw new Error("user_id is required");
     }
 
-    const unreadNotification = await prisma.notification.findMany({
+    const unreadNotification = await prisma.notifikasi.findMany({
       where: {
         userId,
         read: false,
       },
     });
 
-    const readNotification = await prisma.notification.findMany({
+    const readNotification = await prisma.notifikasi.findMany({
       where: {
         userId,
         read: true,
