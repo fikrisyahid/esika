@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Question" ALTER COLUMN "answer" SET NOT NULL,
-ALTER COLUMN "answer" SET DATA TYPE TEXT;
