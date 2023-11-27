@@ -59,7 +59,8 @@ export default async function handler(req, res) {
       if (latestNIM) {
         const latestNIMNumber = parseInt(latestNIM.NIM.slice(-3));
         const currentNIMNumber = latestNIMNumber + 1;
-        NIM = `${currentYear}${currentMonth}${currentDay}${currentNIMNumber}`;
+        const currentNIMString = currentNIMNumber.toString().padStart(3, "0");
+        NIM = `${currentYear}${currentMonth}${currentDay}${currentNIMString}`;
       }
 
       await prisma.mahasiswa.create({
