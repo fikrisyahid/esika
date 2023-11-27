@@ -3,7 +3,7 @@ import middleware from "@/utils/middleware-api";
 import { prisma } from "@/utils/prisma";
 
 export default async function handler(req, res) {
-  const allowed = await middleware({ req, res, method: "GET", roles: "ADMIN" });
+  const allowed = await middleware({ req, res, method: "GET", roles: "admin" });
   if (!allowed.pass) {
     return res.status(allowed.statusCode).json(allowed);
   }

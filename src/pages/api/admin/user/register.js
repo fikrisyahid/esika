@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     req,
     res,
     method: "POST",
-    roles: "ADMIN",
+    roles: "admin",
     anonymous: true,
   });
   if (!allowed.pass) {

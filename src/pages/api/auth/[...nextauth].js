@@ -16,6 +16,11 @@ export const authOptions = {
           where: {
             email: credentials?.email,
           },
+          include: {
+            Admin: true,
+            Dosen: true,
+            Mahasiswa: true,
+          }
         });
         if (!user) {
           throw new Error("Email is not registered");
