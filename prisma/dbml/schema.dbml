@@ -199,36 +199,36 @@ Table Jawaban_Challenge {
   updatedAt DateTime [not null]
 }
 
-Ref: Notifikasi.userId > User.id
+Ref: Notifikasi.userId > User.id [delete: Cascade]
 
-Ref: Admin.userId - User.id
+Ref: Admin.userId - User.id [delete: Cascade]
 
-Ref: Dosen.userId - User.id
+Ref: Dosen.userId - User.id [delete: Cascade]
 
-Ref: Mahasiswa.userId - User.id
+Ref: Mahasiswa.userId - User.id [delete: Cascade]
 
-Ref: Transaksi_Poin.mahasiswaId > Mahasiswa.id
+Ref: Transaksi_Poin.mahasiswaId > Mahasiswa.id [delete: Cascade]
 
-Ref: Reward.transaksi_poinId - Transaksi_Poin.id
+Ref: Reward.transaksi_poinId - Transaksi_Poin.id [delete: Cascade]
 
-Ref: Nilai.mahasiswaId > Mahasiswa.id
+Ref: Nilai.mahasiswaId > Mahasiswa.id [delete: Cascade]
 
-Ref: Kelas.dosenId > Dosen.id
+Ref: Kelas.dosenId > Dosen.id [delete: Cascade]
 
-Ref: Materi.kelasId > Kelas.id
+Ref: Materi.kelasId > Kelas.id [delete: Cascade]
 
-Ref: Tugas.kelasId > Kelas.id
+Ref: Tugas.kelasId > Kelas.id [delete: Cascade]
 
-Ref: Jawaban_Tugas.tugasId - Tugas.id
+Ref: Jawaban_Tugas.tugasId - Tugas.id [delete: Cascade]
 
-Ref: Jawaban_Tugas.mahasiswaId > Mahasiswa.id
+Ref: Jawaban_Tugas.mahasiswaId > Mahasiswa.id [delete: Cascade]
 
-Ref: Ujian.kelasId > Kelas.id
+Ref: Ujian.kelasId > Kelas.id [delete: Cascade]
 
-Ref: Jawaban_Ujian.ujianId - Ujian.id
+Ref: Jawaban_Ujian.ujianId - Ujian.id [delete: Cascade]
 
-Ref: Jawaban_Ujian.mahasiswaId > Mahasiswa.id
+Ref: Jawaban_Ujian.mahasiswaId > Mahasiswa.id [delete: Cascade]
 
-Ref: Challenge.dosenId > Dosen.id
+Ref: Challenge.dosenId > Dosen.id [delete: Cascade]
 
-Ref: Jawaban_Challenge.mahasiswaId > Mahasiswa.id
+Ref: Jawaban_Challenge.mahasiswaId > Mahasiswa.id [delete: Cascade]

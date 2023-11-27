@@ -40,7 +40,13 @@ export default async function middleware({
   }
 
   if (session && !anonymous) {
-    const { role } = session.user;
+    const role = session.user?.Admin
+      ? "admin"
+      : session.user?.Dosen
+      ? "dosen"
+      : session.user?.Mahasiswa
+      ? "mahasiswa"
+      : "";
     const allowedRoles = roles === role || roles?.includes(role);
     if (roles && !allowedRoles && !AdminAPI) {
       return UnauthorizedResponse;

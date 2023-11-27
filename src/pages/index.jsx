@@ -59,7 +59,7 @@ export default function Index() {
         color: "green",
       });
       const response = await fetch(
-        `${SHARED_API_URL}/user/get?email=${postData.email}`
+        `${SHARED_API_URL}/user?email=${postData.email}`
       );
       const user = await response.json();
       const role = user?.data?.Dosen

@@ -17,7 +17,7 @@ export default function Layout({ children }) {
   const router = useRouter();
 
   const { data: user, isLoading: userLoading } = useFetchAPI({
-    url: `${SHARED_API_URL}/user/profile`,
+    url: `${SHARED_API_URL}/user`,
   });
 
   const setUserData = useSetAtom(profile);
