@@ -6,14 +6,14 @@
  * @returns {boolean} - Returns true if the user has authorization, false otherwise.
  */
 export default function isPathAuthorized({ path_role: pathRole, user }) {
-  if (pathRole === "admin") {
-    return user?.Admin;
+  if (pathRole === "admin" && user?.Admin) {
+    return true;
   }
-  if (pathRole === "dosen") {
-    return user?.Dosen;
+  if (pathRole === "dosen" && user?.Dosen) {
+    return true;
   }
-  if (pathRole === "mahasiswa") {
-    return user?.Mahasiswa;
+  if (pathRole === "mahasiswa" && user?.Mahasiswa) {
+    return true;
   }
   return false;
 }
