@@ -4,260 +4,219 @@
 
 Table User {
   id String [pk]
-  name String [not null]
-  username String [unique, not null]
+  nama String [not null]
+  email String [unique, not null]
   password String [not null]
-  point Int [not null, default: 0]
-  role User_Role [not null]
-  user_rank User_Rank [not null, default: 'NEWBIE']
-  course_taken Int [not null, default: 0]
-  quiz_passed Int [not null, default: 0]
-  quiz_failed Int [not null, default: 0]
-  comment_count Int [not null, default: 0]
-  like_count Int [not null, default: 0]
-  quiz_active Quiz
-  quizActiveId String
-  Course Course [not null]
-  Course_Progress Course_Progress [not null]
-  Quiz Quiz [not null]
-  Quiz_Result Quiz_Result [not null]
-  Quiz_Comment Quiz_Comment [not null]
-  Forum_Thread Forum_Thread [not null]
-  Forum_Comment Forum_Comment [not null]
-  Badge Badge [not null]
-  Notification Notification [not null]
+  Dosen Dosen
+  Mahasiswa Mahasiswa
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Notifikasi Notifikasi [not null]
 }
 
-Table Notification {
+Table Notifikasi {
   id String [pk]
-  title String [not null]
-  description String [not null]
-  link String
-  read Boolean [not null, default: false]
   user User [not null]
   userId String [not null]
+  judul String [not null]
+  isi String [not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
-Table Badge {
+Table Dosen {
   id String [pk]
-  name String [not null]
-  image String [not null]
-  student User [not null]
-  userId String [not null]
+  user User [not null]
+  userId String [unique, not null]
+  Kelas Kelas [not null]
+  Challenge Challenge [not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
-Table Course {
+Table Mahasiswa {
   id String [pk]
-  title String [not null]
-  description String [not null]
-  author User [not null]
-  teacherId String [not null]
-  published Boolean [not null, default: false]
-  Chapter Chapter [not null]
+  user User [not null]
+  userId String [unique, not null]
+  NIM String [unique, not null]
+  jumlah_poin Int [not null]
+  Transaksi_Poin Transaksi_Poin [not null]
+  Nilai Nilai [not null]
+  Jawaban_Tugas Jawaban_Tugas [not null]
+  Jawaban_Ujian Jawaban_Ujian [not null]
+  Jawaban_Challenge Jawaban_Challenge [not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-  Course_Progress Course_Progress [not null]
+  updatedAt DateTime [not null]
 }
 
-Table Chapter {
+Table Transaksi_Poin {
   id String [pk]
-  title String [not null]
-  content String [not null]
-  position Int [not null]
-  video_link String
-  course Course [not null]
-  courseId String [not null]
-  Course_Progress Course_Progress [not null]
+  Mahasiswa Mahasiswa [not null]
+  mahasiswaId String [not null]
+  poin_mahasiswa Int [not null]
+  poin_reward Int [not null]
+  tanggal_transaksi DateTime [not null]
+  Reward Reward
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-  Quiz Quiz
-  quizId String [unique]
+  updatedAt DateTime [not null]
 }
 
-Table Quiz {
+Table Reward {
   id String [pk]
-  title String [not null]
-  code String [unique, not null]
-  time_limit Int
-  minimum_score Float
-  quiz_difficulty Quiz_Difficulty [not null]
-  Chapter Chapter
-  author User [not null]
-  teacherId String [not null]
-  published Boolean [not null, default: false]
-  Students User [not null]
-  Question Question [not null]
-  Quiz_Result Quiz_Result [not null]
-  Quiz_Comment Quiz_Comment [not null]
+  transaksi_poin Transaksi_Poin [not null]
+  transaksi_poinId String [unique, not null]
+  deskripsi String [not null]
+  persyaratan String [not null]
+  point Int [not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
-Table Quiz_Comment {
+Table Nilai {
   id String [pk]
-  content String [not null]
-  likes Int [not null, default: 0]
-  dislikes Int [not null, default: 0]
-  author User [not null]
-  userId String [not null]
-  quiz Quiz [not null]
-  quizId String [not null]
+  mahasiswa Mahasiswa [not null]
+  mahasiswaId String [not null]
+  nilai Int [not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-  parentComment Quiz_Comment
-  parentCommentId String
-  childComments Quiz_Comment [not null]
+  updatedAt DateTime [not null]
 }
 
-Table Quiz_Result {
+Table Kelas {
   id String [pk]
-  quiz Quiz [not null]
-  quizId String [not null]
-  student User [not null]
-  Quiz_Result_Detail Quiz_Result_Detail [not null]
-  studentId String [not null]
+  dosen Dosen [not null]
+  dosenId String [not null]
+  kode String [unique, not null]
+  nama String [not null]
+  komposisi_tugas Int [not null]
+  komposisi_uts Int [not null]
+  komposisi_uas Int [not null]
+  komposisi_quiz Int [not null]
+  Materi Materi [not null]
+  Tugas Tugas [not null]
+  Ujian Ujian [not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
-Table Quiz_Result_Detail {
+Table Materi {
   id String [pk]
-  questionId String [not null]
-  Question Question [not null]
-  Quiz_Result Quiz_Result
-  quiz_ResultId String
-  answer String[] [not null]
-  correct Boolean [not null]
+  kelas Kelas [not null]
+  kelasId String [not null]
+  judul String [not null]
+  deskripsi String [not null]
+  file String [not null]
+  tanggal DateTime [default: `now()`, not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
-Table Question {
+Table Tugas {
   id String [pk]
-  title String [not null]
-  answer String [not null]
-  position Int [not null]
-  Hint String
-  type Question_Type [not null]
-  options String[] [not null]
-  quiz Quiz [not null]
-  Quiz_Result_Detail Quiz_Result_Detail [not null]
-  quizId String [not null]
+  kelas Kelas [not null]
+  kelasId String [not null]
+  judul String [not null]
+  deskripsi String [not null]
+  file String [not null]
+  tanggal DateTime [default: `now()`, not null]
+  deadline DateTime
+  Jawaban_Tugas Jawaban_Tugas
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
-Table Course_Progress {
+Table Jawaban_Tugas {
   id String [pk]
-  student User [not null]
-  studentId String [not null]
-  course Course [not null]
-  courseId String [not null]
-  chapter Chapter [not null]
-  createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  tugas Tugas [not null]
+  tugasId String [unique, not null]
+  mahasiswa Mahasiswa [not null]
+  mahasiswaId String [not null]
+  tanggal_submit DateTime
+  file String [not null]
+  nilai Int
 }
 
-Table Forum_Thread {
+Table Ujian {
   id String [pk]
-  title String [not null]
-  content String [not null]
-  author User [not null]
-  userId String [not null]
-  comment Forum_Comment [not null]
+  kelas Kelas [not null]
+  kelasId String [not null]
+  judul String [not null]
+  deskripsi String [not null]
+  file String [not null]
+  tanggal DateTime [default: `now()`, not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Jawaban_Ujian Jawaban_Ujian
 }
 
-Table Forum_Comment {
+Table Jawaban_Ujian {
   id String [pk]
-  content String [not null]
-  likes Int [not null, default: 0]
-  dislikes Int [not null, default: 0]
-  blocked Boolean [not null, default: false]
-  author User [not null]
-  userId String [not null]
-  thread Forum_Thread [not null]
-  threadId String [not null]
+  ujian Ujian [not null]
+  ujianId String [unique, not null]
+  mahasiswa Mahasiswa [not null]
+  mahasiswaId String [not null]
+  tanggal_submit DateTime
+  file String [not null]
+  nilai Int
+}
+
+Table Challenge {
+  id String [pk]
+  dosen Dosen [not null]
+  dosenId String [not null]
+  judul String [not null]
+  deskripsi String [not null]
+  waktu_mulai DateTime [not null]
+  waktu_selesai DateTime [not null]
+  pilihan_1 String [not null]
+  pilihan_2 String [not null]
+  pilihan_3 String [not null]
+  pilihan_4 String [not null]
+  poin Int [not null]
+  jawaban String [not null]
+  tanggal DateTime [default: `now()`, not null]
   createdAt DateTime [default: `now()`, not null]
-  updatedAt DateTime [default: `now()`, not null]
-  parentComment Forum_Comment
-  parentCommentId String
-  childComments Forum_Comment [not null]
+  updatedAt DateTime [not null]
 }
 
-Enum User_Role {
-  TEACHER
-  STUDENT
+Table Jawaban_Challenge {
+  id String [pk]
+  mahasiswa Mahasiswa [not null]
+  mahasiswaId String [not null]
+  jawaban String [not null]
+  penilaian Int
+  hadiah_poin Int
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
 }
 
-Enum User_Rank {
-  NEWBIE
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
-  EXPERT
-  MASTER
-  TEACHER
-}
+Ref: Notifikasi.userId > User.id
 
-Enum Quiz_Difficulty {
-  EASY
-  MEDIUM
-  HARD
-}
+Ref: Dosen.userId - User.id
 
-Enum Question_Type {
-  MULTIPLE_CHOICE
-  TRUE_FALSE
-  SHORT_ANSWER
-  VOICE_RECORDING
-}
+Ref: Mahasiswa.userId - User.id
 
-Ref: User.quizActiveId - Quiz.id [delete: Set Null]
+Ref: Transaksi_Poin.mahasiswaId > Mahasiswa.id
 
-Ref: Notification.userId > User.id [delete: Cascade]
+Ref: Reward.transaksi_poinId - Transaksi_Poin.id
 
-Ref: Badge.userId > User.id [delete: Cascade]
+Ref: Nilai.mahasiswaId > Mahasiswa.id
 
-Ref: Course.teacherId > User.id [delete: Cascade]
+Ref: Kelas.dosenId > Dosen.id
 
-Ref: Chapter.courseId > Course.id [delete: Cascade]
+Ref: Materi.kelasId > Kelas.id
 
-Ref: Chapter.quizId - Quiz.id [delete: Cascade]
+Ref: Tugas.kelasId > Kelas.id
 
-Ref: Quiz.teacherId - User.id [delete: Cascade]
+Ref: Jawaban_Tugas.tugasId - Tugas.id
 
-Ref: Quiz_Comment.userId > User.id [delete: Cascade]
+Ref: Jawaban_Tugas.mahasiswaId > Mahasiswa.id
 
-Ref: Quiz_Comment.quizId > Quiz.id [delete: Cascade]
+Ref: Ujian.kelasId > Kelas.id
 
-Ref: Quiz_Comment.parentCommentId - Quiz_Comment.id
+Ref: Jawaban_Ujian.ujianId - Ujian.id
 
-Ref: Quiz_Result.quizId > Quiz.id
+Ref: Jawaban_Ujian.mahasiswaId > Mahasiswa.id
 
-Ref: Quiz_Result.studentId > User.id
+Ref: Challenge.dosenId > Dosen.id
 
-Ref: Quiz_Result_Detail.questionId > Question.id [delete: Cascade]
-
-Ref: Quiz_Result_Detail.quiz_ResultId > Quiz_Result.id
-
-Ref: Question.quizId > Quiz.id [delete: Cascade]
-
-Ref: Course_Progress.studentId > User.id [delete: Cascade]
-
-Ref: Course_Progress.courseId > Course.id [delete: Cascade]
-
-Ref: Forum_Thread.userId > User.id [delete: Cascade]
-
-Ref: Forum_Comment.userId > User.id [delete: Cascade]
-
-Ref: Forum_Comment.threadId > Forum_Thread.id [delete: Cascade]
-
-Ref: Forum_Comment.parentCommentId - Forum_Comment.id
+Ref: Jawaban_Challenge.mahasiswaId > Mahasiswa.id
