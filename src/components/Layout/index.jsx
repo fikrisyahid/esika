@@ -43,7 +43,7 @@ export default function Layout({ children }) {
     return <BaseLoadingOverlay />;
   }
 
-  if (isPathAuthorized({ user: user?.data, path_role: pathRole })) {
+  if (!isPathAuthorized({ user: user?.data, path_role: pathRole })) {
     return <Unauthorized />;
   }
 

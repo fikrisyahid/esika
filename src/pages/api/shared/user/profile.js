@@ -18,6 +18,11 @@ export default async function handler(req, res) {
       where: {
         id,
       },
+      include: {
+        Admin: true,
+        Dosen: true,
+        Mahasiswa: true,
+      },
     });
     return SUCCESS_RESPONSE({
       res,
