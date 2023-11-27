@@ -1,7 +1,5 @@
 import getProfileImg from "@/utils/get-profile-img";
-import getRankColor from "@/utils/get-rank-color";
 import {
-  Badge,
   Group,
   Menu,
   Stack,
@@ -37,7 +35,7 @@ export default function ProfileMenu({ user }) {
   };
 
   const pageData = {
-    username: user?.data?.username,
+    nama: user?.data?.nama,
     rank: user?.data?.user_rank,
     role: user?.data?.role,
   };
@@ -55,22 +53,19 @@ export default function ProfileMenu({ user }) {
           <Group spacing={theme.spacing.sm}>
             <Image
               alt="profile-pict"
-              src={getProfileImg(pageData.username)}
+              src={getProfileImg(pageData.nama)}
               width={40}
               height={40}
             />
             <Stack spacing={0}>
-              <Text>{user?.data?.name}</Text>
-              <Badge color={getRankColor(pageData.rank)}>{pageData.rank}</Badge>
+              <Text>{user?.data?.nama}</Text>
             </Stack>
           </Group>
         </UnstyledButton>
       </Menu.Target>
 
       <Menu.Dropdown>
-        {pageData.role !== "TEACHER" && (
-          <Menu.Item icon={<IconUser />}>My Profile</Menu.Item>
-        )}
+        <Menu.Item icon={<IconUser />}>My Profile</Menu.Item>
         <Menu.Item color="red" icon={<IconLogout2 />} onClick={handleSignOut}>
           Log Out
         </Menu.Item>
