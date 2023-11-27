@@ -53,7 +53,7 @@ export default function Register() {
   const handleRegister = (values) => {
     const { validation } = ADMIN_PAGE;
     fetchPOST({
-      url: `${ADMIN_API_URL}/user/register?pass=${validation}`,
+      url: `${ADMIN_API_URL}/user?pass=${validation}`,
       body: values,
       setBtnLoading,
       successMessage: "Successfully register user",
