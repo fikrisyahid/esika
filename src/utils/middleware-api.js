@@ -33,7 +33,7 @@ export default async function middleware({
   anonymous,
 }) {
   const session = await getServerSession(req, res, authOptions);
-  const AdminAPI = roles === "ADMIN" || roles?.includes("ADMIN");
+  const AdminAPI = roles === "admin" || roles?.includes("admin");
 
   if (!anonymous && !session) {
     return UnauthorizedResponse;
