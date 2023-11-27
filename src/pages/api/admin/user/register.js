@@ -16,10 +16,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, password, role } = JSON.parse(req.body);
+    const { nama, email, password, role } = JSON.parse(req.body);
 
-    if (!name || !email || !password || !role) {
-      throw new Error("name, email, password, role is required");
+    if (!nama || !email || !password || !role) {
+      throw new Error("nama, email, password, role is required");
     }
 
     const exist = await prisma.user.findUnique({
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
     const result = await prisma.user.create({
       data: {
-        name,
+        nama,
         email,
         password: await hash(password, 10),
       },

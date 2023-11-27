@@ -31,13 +31,13 @@ export default function Register() {
 
   const form = useForm({
     initialValues: {
-      name: "",
+      nama: "",
       email: "",
       password: "",
       role: "",
     },
     validate: {
-      name: (value) => isStringEmpty(value) && "Name is required",
+      nama: (value) => isStringEmpty(value) && "Nama is required",
       email: (value) =>
         isStringEmpty(value)
           ? "Email is required"
@@ -106,11 +106,11 @@ export default function Register() {
       >
         <TextInput
           spellCheck="false"
-          label="Name"
+          label="Nama"
           type="text"
           placeholder="Arif Amin"
           style={{ width: "50%" }}
-          {...form.getInputProps("name")}
+          {...form.getInputProps("nama")}
         />
         <TextInput
           spellCheck="false"
