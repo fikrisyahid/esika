@@ -62,7 +62,13 @@ export default function Index() {
         `${SHARED_API_URL}/user/get?email=${postData.email}`
       );
       const user = await response.json();
-      const role = user?.data?.Dosen ? "dosen" : "mahasiswa";
+      const role = user?.data?.Dosen
+        ? "dosen"
+        : user?.data?.Mahasiswa
+        ? "mahasiswa"
+        : user?.data?.Admin
+        ? "admin"
+        : "";
       if (role === "dosen") {
         router.push("/teacher/dashboard");
         return;
@@ -71,6 +77,11 @@ export default function Index() {
         router.push("/student/dashboard");
         return;
       }
+      if (role === "admin") {
+        router.push("/admin/dashboard");
+        return;
+      }
+      router.push("/unauthorized");
     }
     if (result?.error) {
       notifications.show({

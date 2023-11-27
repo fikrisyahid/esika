@@ -2,11 +2,12 @@ import { AppShell } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Unauthorized from "@/components/Unauthorized";
-import { studentNavLists, teacherNavLists } from "@/data/layout";
+import { adminNavLists, studentNavLists, teacherNavLists } from "@/data/layout";
 import { BASE_COLORS, SHARED_API_URL } from "@/configs";
 import { useSetAtom } from "jotai";
 import { profile } from "@/atoms";
 import useFetchAPI from "@/hooks/useFetchAPI";
+import isPathAuthorized from "@/utils/validation/path-authorized";
 import BaseLoadingOverlay from "../BaseLoadingOverlay";
 import BaseNavbar from "./BaseNavbar";
 import BaseHeader from "./BaseHeader";
@@ -29,13 +30,20 @@ export default function Layout({ children }) {
 
   const teacherRoute = router.pathname.startsWith("/teacher");
   const studentRoute = router.pathname.startsWith("/student");
-  const pathRole = teacherRoute ? "TEACHER" : studentRoute ? "STUDENT" : null;
+  const adminRoute = router.pathname.startsWith("/admin");
+  const pathRole = teacherRoute
+    ? "dosen"
+    : studentRoute
+    ? "mahasiswa"
+    : adminRoute
+    ? "admin"
+    : null;
 
   if (userLoading) {
     return <BaseLoadingOverlay />;
   }
 
-  if (pathRole && user?.data?.role !== pathRole) {
+  if (isPathAuthorized({ user: user?.data, path_role: pathRole })) {
     return <Unauthorized />;
   }
 
@@ -51,7 +59,13 @@ export default function Layout({ children }) {
           opened={opened}
           setOpened={setOpened}
           listNavData={
-            teacherRoute ? teacherNavLists : studentRoute ? studentNavLists : []
+            teacherRoute
+              ? teacherNavLists
+              : studentRoute
+              ? studentNavLists
+              : adminRoute
+              ? adminNavLists
+              : []
           }
         />
       }

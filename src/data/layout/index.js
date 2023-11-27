@@ -1,4 +1,5 @@
+import adminNavLists from "./admin";
 import studentNavLists from "./student";
 import teacherNavLists from "./teacher";
 
-export { studentNavLists, teacherNavLists };
+export { adminNavLists, studentNavLists, teacherNavLists };
