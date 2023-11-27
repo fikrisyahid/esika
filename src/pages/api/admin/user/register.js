@@ -16,31 +16,53 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, username, password, role } = JSON.parse(req.body);
+    const { name, email, password, role } = JSON.parse(req.body);
 
-    if (!name || !username || !password || !role) {
-      throw new Error("name, username, password, role is required");
+    if (!name || !email || !password || !role) {
+      throw new Error("name, email, password, role is required");
     }
 
     const exist = await prisma.user.findUnique({
       where: {
-        username,
+        email,
       },
     });
 
     if (exist) {
-      throw new Error("Username has already been used");
+      throw new Error("Email has already been used");
     }
 
     const result = await prisma.user.create({
       data: {
         name,
-        username,
-        role,
-        user_rank: role === "TEACHER" ? "TEACHER" : "NEWBIE",
+        email,
         password: await hash(password, 10),
       },
     });
+
+    if (role === "mahasiswa") {
+      await prisma.mahasiswa.create({
+        data: {
+          userId: result.id,
+        },
+      });
+    }
+
+    if (role === "dosen") {
+      await prisma.dosen.create({
+        data: {
+          userId: result.id,
+        },
+      });
+    }
+
+    if (role === "admin") {
+      await prisma.admin.create({
+        data: {
+          userId: result.id,
+        },
+      });
+    }
 
     return SUCCESS_RESPONSE({
       res,

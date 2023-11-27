@@ -20,6 +20,7 @@ import {
   BASE_LOADING,
 } from "@/configs";
 import { useForm } from "@mantine/form";
+import isValidEmail from "@/utils/validation/is-valid-email";
 
 export default function Register() {
   const router = useRouter();
@@ -31,13 +32,16 @@ export default function Register() {
   const form = useForm({
     initialValues: {
       name: "",
-      username: "",
+      email: "",
       password: "",
       role: "",
     },
     validate: {
       name: (value) => isStringEmpty(value) && "Name is required",
-      username: (value) => isStringEmpty(value) && "Username is required",
+      email: (value) =>
+        isStringEmpty(value)
+          ? "Email is required"
+          : !isValidEmail(value) && "Email is not valid",
       role: (value) => isStringEmpty(value) && "Role is required",
       password: (value) => {
         const { valid, message } = isValidPassword(value);
@@ -110,11 +114,11 @@ export default function Register() {
         />
         <TextInput
           spellCheck="false"
-          label="Username"
-          type="username"
+          label="Email"
+          type="email"
           placeholder="student"
           style={{ width: "50%" }}
-          {...form.getInputProps("username")}
+          {...form.getInputProps("email")}
         />
         <TextInput
           spellCheck="false"
@@ -129,8 +133,9 @@ export default function Register() {
           placeholder="Pilih salah satu"
           style={{ width: "50%" }}
           data={[
-            { value: "TEACHER", label: "Teacher" },
-            { value: "STUDENT", label: "Student" },
+            { value: "admin", label: "Admin" },
+            { value: "dosen", label: "Dosen" },
+            { value: "mahasiswa", label: "Mahasiswa" },
           ]}
           {...form.getInputProps("role")}
         />
