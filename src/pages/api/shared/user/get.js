@@ -9,17 +9,22 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { username } = req.query;
+    const { email } = req.query;
 
-    if (!username) {
-      throw new Error("username is required");
+    if (!email) {
+      throw new Error("email is required");
     }
 
     const result = await prisma.user.findUnique({
       where: {
-        username,
+        email,
+      },
+      include: {
+        Mahasiswa: true,
+        Dosen: true,
       },
     });
+
     return SUCCESS_RESPONSE({
       res,
       data: result,
