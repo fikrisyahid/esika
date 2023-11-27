@@ -62,12 +62,12 @@ export default function Index() {
         `${SHARED_API_URL}/user/get?email=${postData.email}`
       );
       const user = await response.json();
-      const role = user?.data?.role;
-      if (role === "TEACHER") {
+      const role = user?.data?.Dosen ? "dosen" : "mahasiswa";
+      if (role === "dosen") {
         router.push("/teacher/dashboard");
         return;
       }
-      if (role === "STUDENT") {
+      if (role === "mahasiswa") {
         router.push("/student/dashboard");
         return;
       }
