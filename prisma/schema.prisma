@@ -33,6 +33,7 @@ model Notifikasi {
   userId    String
   judul     String
   isi       String
+  read      Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
