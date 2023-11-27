@@ -1,12 +1,14 @@
 /**
- * Generates a random code consisting of 6 alphanumeric characters.
+ * Generates a random code of specified length.
  *
+ * @param {Object} options - The options for generating the code.
+ * @param {number} [options.length=4] - The length of the code to be generated.
  * @returns {string} The generated code.
  */
-export default function generateCode() {
+export default function generateCode({ length = 4 }) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "";
-  Array.from({ length: 6 }).forEach(() => {
+  Array.from({ length }).forEach(() => {
     code += chars[Math.floor(Math.random() * chars.length)];
   });
   return code;
