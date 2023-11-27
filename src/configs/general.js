@@ -1,0 +1,4 @@
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
+const IMAGE_PROFILE_API = process.env.NEXT_PUBLIC_IMAGE_PROFILE_API;
+
+export { APP_NAME, IMAGE_PROFILE_API };

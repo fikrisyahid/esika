@@ -1,0 +1,233 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum User_Role {
+  TEACHER
+  STUDENT
+}
+
+enum User_Rank {
+  NEWBIE
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+  MASTER
+  TEACHER
+}
+
+model User {
+  id              String            @id @default(uuid())
+  name            String
+  username        String            @unique
+  password        String
+  point           Int               @default(0)
+  role            User_Role
+  user_rank       User_Rank         @default(NEWBIE)
+  course_taken    Int               @default(0)
+  quiz_passed     Int               @default(0)
+  quiz_failed     Int               @default(0)
+  comment_count   Int               @default(0)
+  like_count      Int               @default(0)
+  quiz_active     Quiz?             @relation("QuizActive", fields: [quizActiveId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  quizActiveId    String?
+  Course          Course[]
+  Course_Progress Course_Progress[]
+  Quiz            Quiz[]
+  Quiz_Result     Quiz_Result[]
+  Quiz_Comment    Quiz_Comment[]
+  Forum_Thread    Forum_Thread[]
+  Forum_Comment   Forum_Comment[]
+  Badge           Badge[]
+  Notification    Notification[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now()) @updatedAt
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  link        String?
+  read        Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+}
+
+model Badge {
+  id        String   @id @default(uuid())
+  name      String
+  image     String
+  student   User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Course {
+  id              String            @id @default(uuid())
+  title           String
+  description     String
+  author          User              @relation(fields: [teacherId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  teacherId       String
+  published       Boolean           @default(false)
+  Chapter         Chapter[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now()) @updatedAt
+  Course_Progress Course_Progress[]
+}
+
+model Chapter {
+  id              String            @id @default(uuid())
+  title           String
+  content         String
+  position        Int
+  video_link      String?
+  course          Course            @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  courseId        String
+  Course_Progress Course_Progress[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now()) @updatedAt
+  Quiz            Quiz?             @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  quizId          String?           @unique
+}
+
+enum Quiz_Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Quiz {
+  id              String          @id @default(uuid())
+  title           String
+  code            String          @unique
+  time_limit      Int?
+  minimum_score   Float?
+  quiz_difficulty Quiz_Difficulty
+  Chapter         Chapter?
+  author          User            @relation(fields: [teacherId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  teacherId       String
+  published       Boolean         @default(false)
+  Students        User[]          @relation("QuizActive")
+  Question        Question[]
+  Quiz_Result     Quiz_Result[]
+  Quiz_Comment    Quiz_Comment[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now()) @updatedAt
+}
+
+model Quiz_Comment {
+  id              String         @id @default(uuid())
+  content         String
+  likes           Int            @default(0)
+  dislikes        Int            @default(0)
+  author          User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId          String
+  quiz            Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  quizId          String
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @default(now()) @updatedAt
+  parentComment   Quiz_Comment?  @relation("ChildComments", fields: [parentCommentId], references: [id])
+  parentCommentId String?
+  childComments   Quiz_Comment[] @relation("ChildComments")
+}
+
+model Quiz_Result {
+  id                 String               @id @default(uuid())
+  quiz               Quiz                 @relation(fields: [quizId], references: [id])
+  quizId             String
+  student            User                 @relation(fields: [studentId], references: [id])
+  Quiz_Result_Detail Quiz_Result_Detail[]
+  studentId          String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt
+}
+
+model Quiz_Result_Detail {
+  id            String       @id @default(uuid())
+  questionId    String
+  Question      Question     @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Quiz_Result   Quiz_Result? @relation(fields: [quiz_ResultId], references: [id])
+  quiz_ResultId String?
+  answer        String[]
+  correct       Boolean
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
+}
+
+enum Question_Type {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_ANSWER
+  VOICE_RECORDING
+}
+
+model Question {
+  id                 String               @id @default(uuid())
+  title              String
+  answer             String
+  position           Int
+  Hint               String?
+  type               Question_Type
+  options            String[]
+  quiz               Quiz                 @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Quiz_Result_Detail Quiz_Result_Detail[]
+  quizId             String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now()) @updatedAt
+}
+
+model Course_Progress {
+  id        String    @id @default(uuid())
+  student   User      @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  studentId String
+  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  courseId  String
+  chapter   Chapter[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+}
+
+model Forum_Thread {
+  id        String          @id @default(uuid())
+  title     String
+  content   String
+  author    User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  comment   Forum_Comment[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @default(now()) @updatedAt
+}
+
+model Forum_Comment {
+  id              String          @id @default(uuid())
+  content         String
+  likes           Int             @default(0)
+  dislikes        Int             @default(0)
+  blocked         Boolean         @default(false)
+  author          User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId          String
+  thread          Forum_Thread    @relation(fields: [threadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  threadId        String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now()) @updatedAt
+  parentComment   Forum_Comment?  @relation("ChildComments", fields: [parentCommentId], references: [id])
+  parentCommentId String?
+  childComments   Forum_Comment[] @relation("ChildComments")
+}

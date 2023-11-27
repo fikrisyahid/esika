@@ -1,0 +1,263 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  name String [not null]
+  username String [unique, not null]
+  password String [not null]
+  point Int [not null, default: 0]
+  role User_Role [not null]
+  user_rank User_Rank [not null, default: 'NEWBIE']
+  course_taken Int [not null, default: 0]
+  quiz_passed Int [not null, default: 0]
+  quiz_failed Int [not null, default: 0]
+  comment_count Int [not null, default: 0]
+  like_count Int [not null, default: 0]
+  quiz_active Quiz
+  quizActiveId String
+  Course Course [not null]
+  Course_Progress Course_Progress [not null]
+  Quiz Quiz [not null]
+  Quiz_Result Quiz_Result [not null]
+  Quiz_Comment Quiz_Comment [not null]
+  Forum_Thread Forum_Thread [not null]
+  Forum_Comment Forum_Comment [not null]
+  Badge Badge [not null]
+  Notification Notification [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Notification {
+  id String [pk]
+  title String [not null]
+  description String [not null]
+  link String
+  read Boolean [not null, default: false]
+  user User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Badge {
+  id String [pk]
+  name String [not null]
+  image String [not null]
+  student User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Course {
+  id String [pk]
+  title String [not null]
+  description String [not null]
+  author User [not null]
+  teacherId String [not null]
+  published Boolean [not null, default: false]
+  Chapter Chapter [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  Course_Progress Course_Progress [not null]
+}
+
+Table Chapter {
+  id String [pk]
+  title String [not null]
+  content String [not null]
+  position Int [not null]
+  video_link String
+  course Course [not null]
+  courseId String [not null]
+  Course_Progress Course_Progress [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  Quiz Quiz
+  quizId String [unique]
+}
+
+Table Quiz {
+  id String [pk]
+  title String [not null]
+  code String [unique, not null]
+  time_limit Int
+  minimum_score Float
+  quiz_difficulty Quiz_Difficulty [not null]
+  Chapter Chapter
+  author User [not null]
+  teacherId String [not null]
+  published Boolean [not null, default: false]
+  Students User [not null]
+  Question Question [not null]
+  Quiz_Result Quiz_Result [not null]
+  Quiz_Comment Quiz_Comment [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Quiz_Comment {
+  id String [pk]
+  content String [not null]
+  likes Int [not null, default: 0]
+  dislikes Int [not null, default: 0]
+  author User [not null]
+  userId String [not null]
+  quiz Quiz [not null]
+  quizId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  parentComment Quiz_Comment
+  parentCommentId String
+  childComments Quiz_Comment [not null]
+}
+
+Table Quiz_Result {
+  id String [pk]
+  quiz Quiz [not null]
+  quizId String [not null]
+  student User [not null]
+  Quiz_Result_Detail Quiz_Result_Detail [not null]
+  studentId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Quiz_Result_Detail {
+  id String [pk]
+  questionId String [not null]
+  Question Question [not null]
+  Quiz_Result Quiz_Result
+  quiz_ResultId String
+  answer String[] [not null]
+  correct Boolean [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Question {
+  id String [pk]
+  title String [not null]
+  answer String [not null]
+  position Int [not null]
+  Hint String
+  type Question_Type [not null]
+  options String[] [not null]
+  quiz Quiz [not null]
+  Quiz_Result_Detail Quiz_Result_Detail [not null]
+  quizId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Course_Progress {
+  id String [pk]
+  student User [not null]
+  studentId String [not null]
+  course Course [not null]
+  courseId String [not null]
+  chapter Chapter [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Forum_Thread {
+  id String [pk]
+  title String [not null]
+  content String [not null]
+  author User [not null]
+  userId String [not null]
+  comment Forum_Comment [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Forum_Comment {
+  id String [pk]
+  content String [not null]
+  likes Int [not null, default: 0]
+  dislikes Int [not null, default: 0]
+  blocked Boolean [not null, default: false]
+  author User [not null]
+  userId String [not null]
+  thread Forum_Thread [not null]
+  threadId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  parentComment Forum_Comment
+  parentCommentId String
+  childComments Forum_Comment [not null]
+}
+
+Enum User_Role {
+  TEACHER
+  STUDENT
+}
+
+Enum User_Rank {
+  NEWBIE
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+  MASTER
+  TEACHER
+}
+
+Enum Quiz_Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+Enum Question_Type {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_ANSWER
+  VOICE_RECORDING
+}
+
+Ref: User.quizActiveId - Quiz.id [delete: Set Null]
+
+Ref: Notification.userId > User.id [delete: Cascade]
+
+Ref: Badge.userId > User.id [delete: Cascade]
+
+Ref: Course.teacherId > User.id [delete: Cascade]
+
+Ref: Chapter.courseId > Course.id [delete: Cascade]
+
+Ref: Chapter.quizId - Quiz.id [delete: Cascade]
+
+Ref: Quiz.teacherId - User.id [delete: Cascade]
+
+Ref: Quiz_Comment.userId > User.id [delete: Cascade]
+
+Ref: Quiz_Comment.quizId > Quiz.id [delete: Cascade]
+
+Ref: Quiz_Comment.parentCommentId - Quiz_Comment.id
+
+Ref: Quiz_Result.quizId > Quiz.id
+
+Ref: Quiz_Result.studentId > User.id
+
+Ref: Quiz_Result_Detail.questionId > Question.id [delete: Cascade]
+
+Ref: Quiz_Result_Detail.quiz_ResultId > Quiz_Result.id
+
+Ref: Question.quizId > Quiz.id [delete: Cascade]
+
+Ref: Course_Progress.studentId > User.id [delete: Cascade]
+
+Ref: Course_Progress.courseId > Course.id [delete: Cascade]
+
+Ref: Forum_Thread.userId > User.id [delete: Cascade]
+
+Ref: Forum_Comment.userId > User.id [delete: Cascade]
+
+Ref: Forum_Comment.threadId > Forum_Thread.id [delete: Cascade]
+
+Ref: Forum_Comment.parentCommentId - Forum_Comment.id

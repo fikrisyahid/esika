@@ -1,5 +1,5 @@
 {
-  "name": "esika",
+  "name": "elearning-react",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,12 +9,55 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.0.3"
+    "@emotion/react": "^11.11.1",
+    "@mantine/carousel": "^6.0.14",
+    "@mantine/core": "^6.0.14",
+    "@mantine/dates": "^6.0.14",
+    "@mantine/dropzone": "^6.0.14",
+    "@mantine/form": "^6.0.14",
+    "@mantine/hooks": "^6.0.14",
+    "@mantine/modals": "^6.0.14",
+    "@mantine/notifications": "^6.0.14",
+    "@mantine/nprogress": "^6.0.14",
+    "@mantine/prism": "^6.0.14",
+    "@mantine/spotlight": "^6.0.14",
+    "@mantine/tiptap": "^6.0.14",
+    "@prisma/client": "^5.3.1",
+    "@tabler/icons-react": "^2.22.0",
+    "@tiptap/extension-highlight": "^2.0.4",
+    "@tiptap/extension-image": "^2.0.4",
+    "@tiptap/extension-link": "^2.0.3",
+    "@tiptap/extension-subscript": "^2.0.4",
+    "@tiptap/extension-superscript": "^2.0.4",
+    "@tiptap/extension-text-align": "^2.0.4",
+    "@tiptap/extension-underline": "^2.0.4",
+    "@tiptap/pm": "^2.0.4",
+    "@tiptap/react": "^2.0.3",
+    "@tiptap/starter-kit": "^2.0.3",
+    "bcrypt": "^5.1.0",
+    "dayjs": "^1.11.8",
+    "embla-carousel-react": "^8.0.0-rc07",
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-next": "13.4.7",
+    "jotai": "^2.2.2",
+    "mantine-datatable": "^2.9.1",
+    "next": "13.4.7",
+    "next-auth": "^4.22.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-player": "^2.12.0",
+    "swr": "^2.1.5",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "eslint": "^8",
-    "eslint-config-next": "14.0.3"
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prisma": "^5.3.1",
+    "prisma-dbml-generator": "^0.10.0"
   }
 }
