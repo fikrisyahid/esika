@@ -16,10 +16,13 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === "GET") {
-      const { id } = req.query;
+      const { id, dosen_id: dosenId } = req.query;
 
-      if (!id) {
-        const result = await prisma.kelas.findMany({
+      if (id) {
+        const result = await prisma.kelas.findUnique({
+          where: {
+            id,
+          },
           include: {
             dosen: true,
           },
@@ -31,12 +34,33 @@ export default async function handler(req, res) {
         });
       }
 
-      const result = await prisma.kelas.findUnique({
-        where: {
-          id,
-        },
+      if (dosenId) {
+        const result = await prisma.kelas.findMany({
+          where: {
+            dosenId,
+          },
+          include: {
+            dosen: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        });
+
+        return SUCCESS_RESPONSE({
+          res,
+          data: result,
+        });
+      }
+
+      const result = await prisma.kelas.findMany({
         include: {
-          dosen: true,
+          dosen: {
+            include: {
+              user: true,
+            },
+          },
         },
       });
 
