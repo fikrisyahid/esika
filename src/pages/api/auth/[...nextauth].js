@@ -8,17 +8,17 @@ export const authOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Email", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         const user = await prisma.user.findUnique({
           where: {
-            username: credentials?.username,
+            email: credentials?.email,
           },
         });
         if (!user) {
-          throw new Error("Username is not registered");
+          throw new Error("Email is not registered");
         }
         if (typeof credentials?.password === "string") {
           const passTrue = await compare(credentials.password, user.password);

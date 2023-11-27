@@ -24,7 +24,7 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
 
   const [postData, setPostData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -49,7 +49,7 @@ export default function Index() {
     setBtnLoading(true);
     e.preventDefault();
     const result = await signIn("credentials", {
-      username: postData.username,
+      email: postData.email,
       password: postData.password,
       redirect: false,
     });
@@ -59,18 +59,29 @@ export default function Index() {
         color: "green",
       });
       const response = await fetch(
-        `${SHARED_API_URL}/user/get?username=${postData.username}`
+        `${SHARED_API_URL}/user/get?email=${postData.email}`
       );
       const user = await response.json();
-      const role = user?.data?.role;
-      if (role === "TEACHER") {
+      const role = user?.data?.Dosen
+        ? "dosen"
+        : user?.data?.Mahasiswa
+        ? "mahasiswa"
+        : user?.data?.Admin
+        ? "admin"
+        : "";
+      if (role === "dosen") {
         router.push("/teacher/dashboard");
         return;
       }
-      if (role === "STUDENT") {
+      if (role === "mahasiswa") {
         router.push("/student/dashboard");
         return;
       }
+      if (role === "admin") {
+        router.push("/admin/dashboard");
+        return;
+      }
+      router.push("/unauthorized");
     }
     if (result?.error) {
       notifications.show({
@@ -132,11 +143,11 @@ export default function Index() {
             <Flex style={{ flexGrow: 1 }} />
             <TextInput
               spellCheck="false"
-              label="Username"
-              type="username"
-              placeholder="Masukkan Username"
-              value={postData.username}
-              onChange={(e) => handleChange({ username: e.target.value })}
+              label="Email"
+              type="email"
+              placeholder="Masukkan Email"
+              value={postData.email}
+              onChange={(e) => handleChange({ email: e.target.value })}
               styles={{
                 label: {
                   color: "white",
