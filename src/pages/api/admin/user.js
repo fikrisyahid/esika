@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const allowed = await middleware({
     req,
     res,
-    method: ["GET", "POST"],
+    method: ["GET", "POST", "DELETE"],
     roles: "admin",
     anonymous: true,
   });
@@ -129,6 +129,27 @@ export default async function handler(req, res) {
         res,
         data: result,
         message: "successfully create user",
+      });
+    }
+
+    if (req.method === "DELETE") {
+      const { id } = req.query;
+
+      if (!id) {
+        throw new Error("id is required");
+      }
+
+
+      const result = await prisma.user.delete({
+        where: {
+          id,
+        },
+      });
+
+      return SUCCESS_RESPONSE({
+        res,
+        data: result,
+        message: "successfully delete user",
       });
     }
 
