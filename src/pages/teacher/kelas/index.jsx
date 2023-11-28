@@ -1,22 +1,37 @@
 import { profile } from "@/atoms";
+import BaseConfirmation from "@/components/BaseConfirmation";
 import MainCard from "@/components/MainCard";
 import NoData from "@/components/NoData";
 import PageWrapper from "@/components/PageWrapper";
 import KelasCard from "@/components/kelas/KelasCard";
 import { TEACHER_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
+import { fetchDELETE } from "@/utils/crud";
 import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
-import { Button, Flex, Grid } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
+import { Button, Grid, Group, Title } from "@mantine/core";
+import { IconAlertCircle, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Kelas() {
   const router = useRouter();
 
   const user = useAtomValue(profile);
 
-  const { data: kelas, isLoading: kelasLoading } = useFetchAPI({
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteContent, setDeleteContent] = useState({
+    id: "",
+    nama: "",
+    kode: "",
+  });
+
+  const {
+    data: kelas,
+    isLoading: kelasLoading,
+    mutate: kelasMutate,
+  } = useFetchAPI({
     url: `${TEACHER_API_URL}/kelas?dosen_id=${user?.Dosen?.id}`,
   });
 
@@ -24,35 +39,80 @@ export default function Kelas() {
     router.push("/teacher/kelas/baru");
   };
 
+  const handleDeleteOpen = ({ item }) => {
+    const { id, nama, kode } = item;
+    setDeleteContent({ id, nama, kode });
+    setDeleteOpen(true);
+  };
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
+    setDeleteContent({ id: "", nama: "", kode: "" });
+  };
+
+  const onDeleteSuccess = () => {
+    kelasMutate();
+    handleDeleteClose();
+  };
+
+  const handleDelete = async () => {
+    fetchDELETE({
+      url: `${TEACHER_API_URL}/kelas?id=${deleteContent.id}`,
+      successMessage: "Berhasil menghapus kelas",
+      onSuccess: onDeleteSuccess,
+      setBtnLoading,
+    });
+  };
+
   const pageState = DataLoadCheck({ data: kelas, isLoading: kelasLoading });
 
   return (
     pageState ?? (
       <PageWrapper pageTitle="Kelas">
-        <Flex justify="end">
-          <Button leftIcon={<IconPlus />} color="dark" onClick={handleCreate}>
-            Buat kelas baru
-          </Button>
-        </Flex>
+        <BaseConfirmation
+          btnIcon={<IconTrash />}
+          btnLoading={btnLoading}
+          btnText="Hapus kelas"
+          color="red"
+          title="Hati-hati!"
+          message={[
+            `Apakah kamu yakin ingin menghapus kelas ${deleteContent.kode} - ${deleteContent.nama} ?`,
+            `Semua data yang berhubungan dengan kelas ini akan terhapus juga.`,
+          ]}
+          icon={<IconAlertCircle />}
+          open={deleteOpen}
+          onClose={handleDeleteClose}
+          btnOnClick={handleDelete}
+        />
+        <MainCard>
+          <Group position="apart">
+            <Title>Daftar kelas milik anda</Title>
+            <Button leftIcon={<IconPlus />} color="dark" onClick={handleCreate}>
+              Buat kelas baru
+            </Button>
+          </Group>
+        </MainCard>
         {kelas?.data?.length === 0 ? (
           <MainCard>
-            <NoData text="Kamu tidak memiliki kelas" />
+            <NoData text="Anda tidak memiliki kelas" />
           </MainCard>
         ) : (
           <Grid gutter="lg">
-            {kelas?.data?.map((kelas) => (
-              <Grid.Col md={6} lg={4} key={kelas.id}>
+            {kelas?.data?.map((item) => (
+              <Grid.Col md={6} lg={4} key={item.id}>
                 <KelasCard
-                  dosen={kelas?.dosen?.user?.nama}
-                  komposisi_quiz={kelas?.komposisi_quiz}
-                  komposisi_tugas={kelas?.komposisi_tugas}
-                  komposisi_uts={kelas?.komposisi_uts}
-                  komposisi_uas={kelas?.komposisi_uas}
-                  nama={kelas?.nama}
-                  kode={kelas?.kode}
+                  dosen={item?.dosen?.user?.nama}
+                  komposisi_quiz={item?.komposisi_quiz}
+                  komposisi_tugas={item?.komposisi_tugas}
+                  komposisi_uts={item?.komposisi_uts}
+                  komposisi_uas={item?.komposisi_uas}
+                  nama={item?.nama}
+                  kode={item?.kode}
                   canView
                   canEdit
                   canDelete
+                  onClickDelete={() => {
+                    handleDeleteOpen({ item });
+                  }}
                 />
               </Grid.Col>
             ))}

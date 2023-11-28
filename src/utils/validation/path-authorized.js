@@ -15,5 +15,8 @@ export default function isPathAuthorized({ path_role: pathRole, user }) {
   if (pathRole === "mahasiswa" && user?.Mahasiswa) {
     return true;
   }
+  if (pathRole === "profile" && user) {
+    return true;
+  }
   return false;
 }
