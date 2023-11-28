@@ -1,11 +1,11 @@
 import { Alert } from "@mantine/core";
-import { IconAlertCircle } from "@tabler/icons-react";
+import { IconAlertTriangleFilled } from "@tabler/icons-react";
 
 export default function WorkInProgress() {
   return (
     <Alert
-      icon={<IconAlertCircle size="1rem" />}
-      title="Masih dalam pengembangan!"
+      icon={<IconAlertTriangleFilled size="2rem" />}
+      title="Work in progress!"
       color="yellow"
       radius="md"
       variant="filled"
