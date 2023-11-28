@@ -28,16 +28,23 @@ export default function Layout({ children }) {
     }
   }, [user, setUserData]);
 
+  const isAdmin = user?.data?.Admin;
+  const isTeacher = user?.data?.Dosen;
+  const isStudent = user?.data?.Mahasiswa;
+
   const teacherRoute = router.pathname.startsWith("/teacher");
   const studentRoute = router.pathname.startsWith("/student");
   const adminRoute = router.pathname.startsWith("/admin");
+  const profileRoute = router.pathname.startsWith("/profile");
   const pathRole = teacherRoute
     ? "dosen"
     : studentRoute
     ? "mahasiswa"
     : adminRoute
     ? "admin"
-    : null;
+    : profileRoute
+    ? "profile"
+    : "";
 
   if (userLoading) {
     return <BaseLoadingOverlay />;
@@ -59,11 +66,11 @@ export default function Layout({ children }) {
           opened={opened}
           setOpened={setOpened}
           listNavData={
-            teacherRoute
+            teacherRoute || (isTeacher && profileRoute)
               ? teacherNavLists
-              : studentRoute
+              : studentRoute || (isStudent && profileRoute)
               ? studentNavLists
-              : adminRoute
+              : adminRoute || (isAdmin && profileRoute)
               ? adminNavLists
               : []
           }

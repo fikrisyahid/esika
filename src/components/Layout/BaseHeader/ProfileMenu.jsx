@@ -11,9 +11,16 @@ import { notifications } from "@mantine/notifications";
 import { IconLogout2, IconUser } from "@tabler/icons-react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function ProfileMenu({ user }) {
   const theme = useMantineTheme();
+
+  const router = useRouter();
+
+  const handleProfile = () => {
+    router.push(`/profile`);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -65,7 +72,9 @@ export default function ProfileMenu({ user }) {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Item icon={<IconUser />}>My Profile</Menu.Item>
+        <Menu.Item icon={<IconUser />} onClick={handleProfile}>
+          My Profile
+        </Menu.Item>
         <Menu.Item color="red" icon={<IconLogout2 />} onClick={handleSignOut}>
           Log Out
         </Menu.Item>
