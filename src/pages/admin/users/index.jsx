@@ -11,7 +11,6 @@ import { ActionIcon, Badge, Button, Group, Title } from "@mantine/core";
 import {
   IconAlertCircle,
   IconEdit,
-  IconEye,
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
@@ -41,6 +40,11 @@ export default function Users() {
 
   const handleCreateUser = () => {
     router.push("/admin/users/create");
+  };
+
+  const handleEditUser = ({ item }) => {
+    const { id } = item;
+    router.push(`/admin/users/${id}`);
   };
 
   const handleDeleteOpen = ({ item }) => {
@@ -142,10 +146,11 @@ export default function Users() {
                 textAlignment: "end",
                 render: (values) => (
                   <Group position="right">
-                    <ActionIcon variant="filled" color="green">
-                      <IconEye />
-                    </ActionIcon>
-                    <ActionIcon variant="filled" color="yellow">
+                    <ActionIcon
+                      variant="filled"
+                      color="yellow"
+                      onClick={() => handleEditUser({ item: values })}
+                    >
                       <IconEdit />
                     </ActionIcon>
                     <ActionIcon
