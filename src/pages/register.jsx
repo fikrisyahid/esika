@@ -37,11 +37,11 @@ export default function Register() {
       role: "",
     },
     validate: {
-      nama: (value) => isStringEmpty(value) && "Nama is required",
+      nama: (value) => isStringEmpty(value) && "Nama tidak boleh kosong",
       email: (value) =>
         isStringEmpty(value)
-          ? "Email is required"
-          : !isValidEmail(value) && "Email is not valid",
+          ? "Email tidak boleh kosong"
+          : !isValidEmail(value) && "Email tidak valid",
       role: (value) => isStringEmpty(value) && "Role is required",
       password: (value) => {
         const { valid, message } = isValidPassword(value);
@@ -56,7 +56,7 @@ export default function Register() {
       url: `${ADMIN_API_URL}/user?pass=${validation}`,
       body: values,
       setBtnLoading,
-      successMessage: "Successfully register user",
+      successMessage: "Berhasil mendaftarkan user",
     });
   };
 
