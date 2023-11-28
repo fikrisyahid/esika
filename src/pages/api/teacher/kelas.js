@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const allowed = await middleware({
     req,
     res,
-    method: ["GET", "POST"],
+    method: ["GET", "POST", "DELETE"],
     roles: "dosen",
   });
   if (!allowed.pass) {
@@ -124,6 +124,41 @@ export default async function handler(req, res) {
         res,
         data: result,
         message: "successfully create kelas",
+      });
+    }
+
+    if (req.method === "DELETE") {
+      const { id } = req.query;
+
+      if (!id) {
+        throw new Error("id is required");
+      }
+
+      // Check if current user is the owner
+      const kelas = await prisma.kelas.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!kelas) {
+        throw new Error("kelas not found");
+      }
+
+      if (kelas.dosenId !== allowed?.session?.user?.Dosen?.id) {
+        throw new Error("Not authorized");
+      }
+
+      const result = await prisma.kelas.delete({
+        where: {
+          id,
+        },
+      });
+
+      return SUCCESS_RESPONSE({
+        res,
+        data: result,
+        message: "successfully delete kelas",
       });
     }
 
