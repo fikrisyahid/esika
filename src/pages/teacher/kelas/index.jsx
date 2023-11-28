@@ -36,7 +36,7 @@ export default function Kelas() {
   });
 
   const handleCreate = () => {
-    router.push("/teacher/kelas/baru");
+    router.push("/teacher/kelas/create");
   };
 
   const handleDeleteOpen = ({ item }) => {

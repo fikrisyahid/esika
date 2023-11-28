@@ -13,7 +13,7 @@ import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function BuatKelas() {
+export default function CreateKelas() {
   const router = useRouter();
 
   const [btnLoading, setBtnLoading] = useState(false);
