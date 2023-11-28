@@ -3,7 +3,7 @@ import middleware from "@/utils/middleware-api";
 import { prisma } from "@/utils/prisma";
 
 export default async function handler(req, res) {
-  const allowed = await middleware({ req, res, method: ["GET"] });
+  const allowed = await middleware({ req, res, method: ["GET", "PUT"] });
   if (!allowed.pass) {
     return res.status(allowed.statusCode).json(allowed);
   }
@@ -47,6 +47,26 @@ export default async function handler(req, res) {
         res,
         data: result,
         message: "successfully get user",
+      });
+    }
+
+    if (req.method === "PUT") {
+      const { id } = allowed.session.user;
+      const { nama } = JSON.parse(req.body);
+
+      const result = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          nama,
+        },
+      });
+
+      return SUCCESS_RESPONSE({
+        res,
+        data: result,
+        message: "successfully update user",
       });
     }
 
