@@ -1,3 +1,4 @@
+import { profile } from "@/atoms";
 import BaseConfirmation from "@/components/BaseConfirmation";
 import BaseTable from "@/components/BaseTable";
 import MainCard from "@/components/MainCard";
@@ -14,11 +15,14 @@ import {
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Users() {
   const router = useRouter();
+
+  const currentUser = useAtomValue(profile);
 
   const [btnLoading, setBtnLoading] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -148,6 +152,7 @@ export default function Users() {
                       variant="filled"
                       color="red"
                       onClick={() => handleDeleteOpen({ item: values })}
+                      disabled={currentUser.id === values.id}
                     >
                       <IconTrash />
                     </ActionIcon>
