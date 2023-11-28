@@ -53,7 +53,7 @@ export default function CreateUser() {
   };
 
   return (
-    <PageWrapper>
+    <PageWrapper title="Tambah pengguna">
       <MainCard>
         <Group>
           <Button

@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const allowed = await middleware({
     req,
     res,
-    method: ["GET", "POST", "DELETE"],
+    method: ["GET", "POST", "DELETE", "PUT"],
     roles: "admin",
     anonymous: true,
   });
@@ -17,12 +17,12 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === "GET") {
-      const { email } = req.query;
+      const { id } = req.query;
 
-      if (email) {
+      if (id) {
         const result = await prisma.user.findUnique({
           where: {
-            email,
+            id,
           },
           include: {
             Mahasiswa: true,
@@ -43,6 +43,9 @@ export default async function handler(req, res) {
           Mahasiswa: true,
           Dosen: true,
           Admin: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
 
@@ -139,7 +142,6 @@ export default async function handler(req, res) {
         throw new Error("id is required");
       }
 
-
       const result = await prisma.user.delete({
         where: {
           id,
@@ -150,6 +152,34 @@ export default async function handler(req, res) {
         res,
         data: result,
         message: "successfully delete user",
+      });
+    }
+
+    if (req.method === "PUT") {
+      const { id } = req.query;
+      const { nama } = JSON.parse(req.body);
+
+      if (!id) {
+        throw new Error("id is required");
+      }
+
+      if (!nama) {
+        throw new Error("nama is required");
+      }
+
+      const result = await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          nama,
+        },
+      });
+
+      return SUCCESS_RESPONSE({
+        res,
+        data: result,
+        message: "successfully update user",
       });
     }
 

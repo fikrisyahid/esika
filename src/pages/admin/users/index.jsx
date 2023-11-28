@@ -1,3 +1,4 @@
+import { profile } from "@/atoms";
 import BaseConfirmation from "@/components/BaseConfirmation";
 import BaseTable from "@/components/BaseTable";
 import MainCard from "@/components/MainCard";
@@ -10,15 +11,17 @@ import { ActionIcon, Badge, Button, Group, Title } from "@mantine/core";
 import {
   IconAlertCircle,
   IconEdit,
-  IconEye,
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Users() {
   const router = useRouter();
+
+  const currentUser = useAtomValue(profile);
 
   const [btnLoading, setBtnLoading] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -37,6 +40,11 @@ export default function Users() {
 
   const handleCreateUser = () => {
     router.push("/admin/users/create");
+  };
+
+  const handleEditUser = ({ item }) => {
+    const { id } = item;
+    router.push(`/admin/users/${id}`);
   };
 
   const handleDeleteOpen = ({ item }) => {
@@ -138,16 +146,18 @@ export default function Users() {
                 textAlignment: "end",
                 render: (values) => (
                   <Group position="right">
-                    <ActionIcon variant="filled" color="green">
-                      <IconEye />
-                    </ActionIcon>
-                    <ActionIcon variant="filled" color="yellow">
+                    <ActionIcon
+                      variant="filled"
+                      color="yellow"
+                      onClick={() => handleEditUser({ item: values })}
+                    >
                       <IconEdit />
                     </ActionIcon>
                     <ActionIcon
                       variant="filled"
                       color="red"
                       onClick={() => handleDeleteOpen({ item: values })}
+                      disabled={currentUser.id === values.id}
                     >
                       <IconTrash />
                     </ActionIcon>
