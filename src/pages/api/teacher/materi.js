@@ -14,6 +14,26 @@ export default async function handler(req, res) {
   }
 
   try {
+    if (req.method === "GET") {
+      const { id } = req.query;
+
+      if (!id) {
+        throw new Error("id is required");
+      }
+
+      const result = await prisma.materi.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      return SUCCESS_RESPONSE({
+        res,
+        data: result,
+        message: "successfully get materi",
+      });
+    }
+
     if (req.method === "POST") {
       const {
         kelas_id: kelasId,
@@ -39,6 +59,51 @@ export default async function handler(req, res) {
         res,
         data: result,
         message: "successfully added materi",
+      });
+    }
+
+    if (req.method === "PUT") {
+      const { id, judul, deskripsi, file } = JSON.parse(req.body);
+
+      if (!id || !judul || !deskripsi || !file) {
+        throw new Error("id, judul, deskripsi, file is required");
+      }
+
+      const result = await prisma.materi.update({
+        where: {
+          id,
+        },
+        data: {
+          judul,
+          deskripsi,
+          file,
+        },
+      });
+
+      return SUCCESS_RESPONSE({
+        res,
+        data: result,
+        message: "successfully updated materi",
+      });
+    }
+
+    if (req.method === "DELETE") {
+      const { id } = req.query;
+
+      if (!id) {
+        throw new Error("id is required");
+      }
+
+      const result = await prisma.materi.delete({
+        where: {
+          id,
+        },
+      });
+
+      return SUCCESS_RESPONSE({
+        res,
+        data: result,
+        message: "successfully deleted materi",
       });
     }
 
