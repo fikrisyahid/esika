@@ -19,8 +19,12 @@ export default function Kelas() {
 
   const { isDev } = getDevStatus();
 
-  const { data: kelas, isLoading: kelasLoading } = useFetchAPI({
+  const { data: myKelas, isLoading: myKelasLoading } = useFetchAPI({
     url: `${SHARED_API_URL}/kelas?mahasiswa_id=${user?.Mahasiswa?.id}`,
+  });
+
+  const { data: otherKelas, isLoading: otherKelasLoading } = useFetchAPI({
+    url: `${SHARED_API_URL}/kelas?mahasiswa_id=${user?.Mahasiswa?.id}&exclude_my_kelas=true`,
   });
 
   const handleViewKelas = ({ id }) => {
@@ -28,8 +32,8 @@ export default function Kelas() {
   };
 
   const pageState = DataLoadCheck({
-    data: kelas,
-    isLoading: kelasLoading,
+    data: [myKelas, otherKelas],
+    isLoading: [myKelasLoading, otherKelasLoading],
   });
 
   return (
@@ -37,11 +41,11 @@ export default function Kelas() {
       <PageWrapper pageTitle="Kelas">
         <MainCard>
           <Title mb="md">Daftar kelas yang kamu ikuti</Title>
-          {kelas?.data?.length === 0 ? (
+          {myKelas?.data?.length === 0 ? (
             <NoData text="Anda tidak memiliki kelas" />
           ) : (
             <Grid gutter="lg">
-              {kelas?.data?.map((item) => (
+              {myKelas?.data?.map((item) => (
                 <Grid.Col md={6} lg={4} key={item.id}>
                   <KelasCard
                     dosen={item?.dosen?.user?.nama}
@@ -60,7 +64,37 @@ export default function Kelas() {
             </Grid>
           )}
         </MainCard>
-        {isDev && <PrettyJSON json={kelas} />}
+        <MainCard>
+          <Title>Daftar kelas lainnya</Title>
+          {otherKelas?.data?.length === 0 ? (
+            <NoData text="Tidak ada kelas lain yang tersedia" />
+          ) : (
+            <Grid gutter="lg">
+              {otherKelas?.data?.map((item) => (
+                <Grid.Col md={6} lg={4} key={item.id}>
+                  <KelasCard
+                    dosen={item?.dosen?.user?.nama}
+                    komposisi_quiz={item?.komposisi_quiz}
+                    komposisi_tugas={item?.komposisi_tugas}
+                    komposisi_uts={item?.komposisi_uts}
+                    komposisi_uas={item?.komposisi_uas}
+                    nama={item?.nama}
+                    kode={item?.kode}
+                    canView
+                    onClickView={() => handleViewKelas({ id: item?.id })}
+                    mahasiswaCount={item?._count?.Nilai}
+                  />
+                </Grid.Col>
+              ))}
+            </Grid>
+          )}
+        </MainCard>
+        {isDev && (
+          <>
+            <PrettyJSON json={myKelas} />
+            <PrettyJSON json={otherKelas} />
+          </>
+        )}
       </PageWrapper>
     )
   );

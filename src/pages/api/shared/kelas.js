@@ -22,6 +22,7 @@ export default async function handler(req, res) {
         tugas,
         dosen_id: dosenId,
         mahasiswa_id: mahasiswaId,
+        exclude_my_kelas: excludeMyKelas,
       } = req.query;
 
       if (id) {
@@ -96,9 +97,19 @@ export default async function handler(req, res) {
         const result = await prisma.kelas.findMany({
           where: {
             Nilai: {
-              some: {
-                mahasiswaId,
-              },
+              ...(excludeMyKelas
+                ? {
+                    every: {
+                      mahasiswaId: {
+                        not: mahasiswaId,
+                      },
+                    },
+                  }
+                : {
+                    some: {
+                      mahasiswaId,
+                    },
+                  }),
             },
           },
           include: {
