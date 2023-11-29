@@ -58,6 +58,14 @@ export default function DetailKelas() {
     url: `${TEACHER_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true&tugas=true`,
   });
 
+  const {
+    data: siswa,
+    isLoading: siswaLoading,
+    mutate: siswaMutate,
+  } = useFetchAPI({
+    url: `${TEACHER_API_URL}/mahasiswa?kelas_id=${idKelas}`,
+  });
+
   const [btnLoadingMateri, setBtnLoadingMateri] = useState(false);
   const [deleteMateriOpen, setDeleteMateriOpen] = useState(false);
   const [deleteMateriContent, setDeleteMateriContent] = useState({
@@ -108,6 +116,7 @@ export default function DetailKelas() {
   };
   const onDeleteSiswaSuccess = () => {
     kelasMutate();
+    siswaMutate();
     handleDeleteSiswaClose();
   };
   const handleDeleteSiswa = async () => {
@@ -120,8 +129,8 @@ export default function DetailKelas() {
   };
 
   const pageState = DataLoadCheck({
-    data: kelas,
-    isLoading: kelasLoading,
+    data: [kelas, siswa],
+    isLoading: [kelasLoading, siswaLoading],
   });
 
   return (
@@ -132,6 +141,8 @@ export default function DetailKelas() {
           onClose={handleCreateMahasiswaClose}
           kelasId={idKelas}
           kelasMutate={kelasMutate}
+          siswa={siswa}
+          siswaMutate={siswaMutate}
         />
         <BaseConfirmation
           btnIcon={<IconTrash />}
