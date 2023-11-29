@@ -39,6 +39,11 @@ export default function Kelas() {
     router.push("/teacher/kelas/create");
   };
 
+  const handleEdit = ({ item }) => {
+    const { id } = item;
+    router.push(`/teacher/kelas/edit/${id}`);
+  };
+
   const handleDeleteOpen = ({ item }) => {
     const { id, nama, kode } = item;
     setDeleteContent({ id, nama, kode });
@@ -110,6 +115,7 @@ export default function Kelas() {
                   canView
                   canEdit
                   canDelete
+                  onClickEdit={() => handleEdit({ item })}
                   onClickDelete={() => {
                     handleDeleteOpen({ item });
                   }}

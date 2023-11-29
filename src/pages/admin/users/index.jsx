@@ -82,7 +82,7 @@ export default function Users() {
         <BaseConfirmation
           btnIcon={<IconTrash />}
           btnLoading={btnLoading}
-          btnText="Hapus kelas"
+          btnText="Hapus pengguna"
           color="red"
           title="Hati-hati!"
           message={[

@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const allowed = await middleware({
     req,
     res,
-    method: ["GET", "POST", "DELETE"],
+    method: ["GET", "POST", "DELETE", "PUT"],
     roles: "dosen",
   });
   if (!allowed.pass) {
@@ -159,6 +159,67 @@ export default async function handler(req, res) {
         res,
         data: result,
         message: "successfully delete kelas",
+      });
+    }
+
+    if (req.method === "PUT") {
+      const {
+        id,
+        nama,
+        komposisi_quiz: komposisiQuiz,
+        komposisi_tugas: komposisiTugas,
+        komposisi_uts: komposisiUTS,
+        komposisi_uas: komposisiUAS,
+      } = JSON.parse(req.body);
+
+      if (!id) {
+        throw new Error("id is required");
+      }
+
+      if (
+        !nama &&
+        !komposisiQuiz &&
+        !komposisiTugas &&
+        !komposisiUTS &&
+        !komposisiUAS
+      ) {
+        throw new Error(
+          "nama, komposisi_quiz, komposisi_tugas, komposisi_uts, komposisi_uas is required"
+        );
+      }
+
+      // Check if current user is the owner
+      const kelas = await prisma.kelas.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!kelas) {
+        throw new Error("kelas not found");
+      }
+
+      if (kelas.dosenId !== allowed?.session?.user?.Dosen?.id) {
+        throw new Error("Not authorized");
+      }
+
+      const result = await prisma.kelas.update({
+        where: {
+          id,
+        },
+        data: {
+          nama,
+          komposisi_quiz: komposisiQuiz,
+          komposisi_tugas: komposisiTugas,
+          komposisi_uts: komposisiUTS,
+          komposisi_uas: komposisiUAS,
+        },
+      });
+
+      return SUCCESS_RESPONSE({
+        res,
+        data: result,
+        message: "successfully update kelas",
       });
     }
 
