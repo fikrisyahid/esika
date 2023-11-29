@@ -44,6 +44,11 @@ export default function Kelas() {
     router.push(`/teacher/kelas/edit/${id}`);
   };
 
+  const handleView = ({ item }) => {
+    const { id } = item;
+    router.push(`/teacher/kelas/detail/${id}`);
+  };
+
   const handleDeleteOpen = ({ item }) => {
     const { id, nama, kode } = item;
     setDeleteContent({ id, nama, kode });
@@ -115,10 +120,9 @@ export default function Kelas() {
                   canView
                   canEdit
                   canDelete
+                  onClickView={() => handleView({ item })}
                   onClickEdit={() => handleEdit({ item })}
-                  onClickDelete={() => {
-                    handleDeleteOpen({ item });
-                  }}
+                  onClickDelete={() => handleDeleteOpen({ item })}
                 />
               </Grid.Col>
             ))}

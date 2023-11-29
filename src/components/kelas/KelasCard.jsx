@@ -13,7 +13,7 @@ export default function KelasCard({
   canView,
   canEdit,
   canDelete,
-  onClickEye,
+  onClickView,
   onClickEdit,
   onClickDelete,
 }) {
@@ -40,7 +40,7 @@ export default function KelasCard({
         <Text weight="bold">{dosen}</Text>
         <Group>
           {canView && (
-            <ActionIcon variant="filled" color="green" onClick={onClickEye}>
+            <ActionIcon variant="filled" color="green" onClick={onClickView}>
               <IconEye />
             </ActionIcon>
           )}
