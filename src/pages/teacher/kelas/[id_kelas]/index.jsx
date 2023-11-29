@@ -14,9 +14,11 @@ import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
 import {
   ActionIcon,
   Button,
+  Code,
   Flex,
   Grid,
   Group,
+  Progress,
   Text,
   Title,
 } from "@mantine/core";
@@ -185,6 +187,50 @@ export default function DetailKelas() {
             </Button>
             <Title>Detail kelas</Title>
           </Group>
+          <Title size={24}>{kelas?.data?.nama}</Title>
+
+          <Text>
+            Kode: <Code fz="md">{kelas?.data?.kode}</Code>
+          </Text>
+          <Progress
+            radius="xl"
+            size={24}
+            styles={{
+              label: {
+                fontSize: 10,
+              },
+            }}
+            sections={[
+              {
+                value: kelas?.data?.komposisi_tugas,
+                color: "pink",
+                label: "Tugas",
+                tooltip: `Komposisi tugas - ${kelas?.data?.komposisi_tugas} %`,
+              },
+              {
+                value: kelas?.data?.komposisi_quiz,
+                color: "green",
+                label: "Quiz",
+                tooltip: `Komposisi quiz - ${kelas?.data?.komposisi_quiz} %`,
+              },
+              {
+                value: kelas?.data?.komposisi_uts,
+                color: "violet",
+                label: "UTS",
+                tooltip: `Komposisi UTS - ${kelas?.data?.komposisi_uts} %`,
+              },
+              {
+                value: kelas?.data?.komposisi_uas,
+                color: "orange",
+                label: "UAS",
+                tooltip: `Komposisi UAS - ${kelas?.data?.komposisi_uas} %`,
+              },
+            ]}
+          />
+          <Text>Dosen pengampu:</Text>
+          <Text weight="bold" mt={-10}>
+            {kelas?.data?.dosen?.user?.nama}
+          </Text>
         </MainCard>
         <Grid>
           <Grid.Col md={6}>
