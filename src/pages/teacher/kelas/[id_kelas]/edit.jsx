@@ -1,7 +1,7 @@
 import { profile } from "@/atoms";
 import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchPUT } from "@/utils/crud";
 import formNumberChange from "@/utils/form/form-number-change";
@@ -25,7 +25,7 @@ export default function CreateKelas() {
   const user = useAtomValue(profile);
 
   const { data: kelas, isLoading: kelasLoading } = useFetchAPI({
-    url: `${TEACHER_API_URL}/kelas?id=${idKelas}`,
+    url: `${SHARED_API_URL}/kelas?id=${idKelas}`,
   });
 
   const handleBack = () => {
@@ -72,7 +72,7 @@ export default function CreateKelas() {
 
   const handleCreateCourse = (values) => {
     fetchPUT({
-      url: `${TEACHER_API_URL}/kelas?id=${idKelas}`,
+      url: `${SHARED_API_URL}/kelas?id=${idKelas}`,
       body: {
         ...values,
         id: kelas?.data?.id,

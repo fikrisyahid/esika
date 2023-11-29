@@ -1,4 +1,4 @@
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import { Modal, Stack, Text } from "@mantine/core";
 import { fetchPOST } from "@/utils/crud";
 import { useState } from "react";
@@ -22,7 +22,7 @@ export default function AddStudentDialog({
 
   const handleAddStudent = async ({ mahasiswaId }) => {
     fetchPOST({
-      url: `${TEACHER_API_URL}/nilai`,
+      url: `${SHARED_API_URL}/nilai`,
       body: {
         kelas_id: kelasId,
         mahasiswa_id: mahasiswaId,

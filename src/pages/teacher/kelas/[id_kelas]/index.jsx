@@ -1,3 +1,4 @@
+import { profile } from "@/atoms";
 import BaseConfirmation from "@/components/BaseConfirmation";
 import BaseTable from "@/components/BaseTable";
 import MainCard from "@/components/MainCard";
@@ -6,7 +7,7 @@ import PageWrapper from "@/components/PageWrapper";
 import PrettyJSON from "@/components/PrettyJSON";
 import AddStudentDialog from "@/components/kelas/AddStudentDialog";
 import MateriCard from "@/components/kelas/MateriCard";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchDELETE } from "@/utils/crud";
 import getDevStatus from "@/utils/get-dev-status";
@@ -14,9 +15,11 @@ import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
 import {
   ActionIcon,
   Button,
+  Code,
   Flex,
   Grid,
   Group,
+  Progress,
   Text,
   Title,
 } from "@mantine/core";
@@ -27,11 +30,14 @@ import {
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function DetailKelas() {
   const router = useRouter();
+
+  const user = useAtomValue(profile);
 
   const { isDev } = getDevStatus();
 
@@ -55,7 +61,7 @@ export default function DetailKelas() {
     isLoading: kelasLoading,
     mutate: kelasMutate,
   } = useFetchAPI({
-    url: `${TEACHER_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true&tugas=true`,
+    url: `${SHARED_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true&tugas=true`,
   });
 
   const {
@@ -63,7 +69,7 @@ export default function DetailKelas() {
     isLoading: siswaLoading,
     mutate: siswaMutate,
   } = useFetchAPI({
-    url: `${TEACHER_API_URL}/mahasiswa?kelas_id=${idKelas}`,
+    url: `${SHARED_API_URL}/mahasiswa?kelas_id=${idKelas}`,
   });
 
   const [btnLoadingMateri, setBtnLoadingMateri] = useState(false);
@@ -87,7 +93,7 @@ export default function DetailKelas() {
   };
   const handleDeleteMateri = async () => {
     fetchDELETE({
-      url: `${TEACHER_API_URL}/materi?id=${deleteMateriContent.id}`,
+      url: `${SHARED_API_URL}/materi?id=${deleteMateriContent.id}`,
       successMessage: "Materi berhasil dihapus",
       onSuccess: onDeleteMateriSuccess,
       setBtnLoading: setBtnLoadingMateri,
@@ -121,7 +127,7 @@ export default function DetailKelas() {
   };
   const handleDeleteSiswa = async () => {
     fetchDELETE({
-      url: `${TEACHER_API_URL}/nilai?id=${deleteSiswaContent.id}`,
+      url: `${SHARED_API_URL}/nilai?id=${deleteSiswaContent.id}`,
       successMessage: "Mahasiswa berhasil dihapus",
       onSuccess: onDeleteSiswaSuccess,
       setBtnLoading: setBtnLoadingSiswa,
@@ -132,6 +138,23 @@ export default function DetailKelas() {
     data: [kelas, siswa],
     isLoading: [kelasLoading, siswaLoading],
   });
+
+  if (kelas?.status === "success" && kelas?.data?.dosenId !== user?.Dosen?.id) {
+    return (
+      <MainCard>
+        <Group>
+          <Button
+            color="dark"
+            leftIcon={<IconArrowLeft />}
+            onClick={handleBack}
+          >
+            Kembali
+          </Button>
+          <Title>Kamu tidak memiliki akses terhadap kelas ini</Title>
+        </Group>
+      </MainCard>
+    );
+  }
 
   return (
     pageState ?? (
@@ -185,6 +208,49 @@ export default function DetailKelas() {
             </Button>
             <Title>Detail kelas</Title>
           </Group>
+          <Title size={24}>{kelas?.data?.nama}</Title>
+          <Text>
+            Kode: <Code fz="md">{kelas?.data?.kode}</Code>
+          </Text>
+          <Progress
+            radius="xl"
+            size={24}
+            styles={{
+              label: {
+                fontSize: 10,
+              },
+            }}
+            sections={[
+              {
+                value: kelas?.data?.komposisi_tugas,
+                color: "pink",
+                label: "Tugas",
+                tooltip: `Komposisi tugas - ${kelas?.data?.komposisi_tugas} %`,
+              },
+              {
+                value: kelas?.data?.komposisi_quiz,
+                color: "green",
+                label: "Quiz",
+                tooltip: `Komposisi quiz - ${kelas?.data?.komposisi_quiz} %`,
+              },
+              {
+                value: kelas?.data?.komposisi_uts,
+                color: "violet",
+                label: "UTS",
+                tooltip: `Komposisi UTS - ${kelas?.data?.komposisi_uts} %`,
+              },
+              {
+                value: kelas?.data?.komposisi_uas,
+                color: "orange",
+                label: "UAS",
+                tooltip: `Komposisi UAS - ${kelas?.data?.komposisi_uas} %`,
+              },
+            ]}
+          />
+          <Text>Dosen pengampu:</Text>
+          <Text weight="bold" mt={-10}>
+            {kelas?.data?.dosen?.user?.nama}
+          </Text>
         </MainCard>
         <Grid>
           <Grid.Col md={6}>

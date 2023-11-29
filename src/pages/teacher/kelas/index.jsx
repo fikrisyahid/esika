@@ -5,7 +5,7 @@ import NoData from "@/components/NoData";
 import PageWrapper from "@/components/PageWrapper";
 import PrettyJSON from "@/components/PrettyJSON";
 import KelasCard from "@/components/kelas/KelasCard";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchDELETE } from "@/utils/crud";
 import getDevStatus from "@/utils/get-dev-status";
@@ -36,7 +36,7 @@ export default function Kelas() {
     isLoading: kelasLoading,
     mutate: kelasMutate,
   } = useFetchAPI({
-    url: `${TEACHER_API_URL}/kelas?dosen_id=${user?.Dosen?.id}`,
+    url: `${SHARED_API_URL}/kelas?dosen_id=${user?.Dosen?.id}`,
   });
 
   const handleCreate = () => {
@@ -70,7 +70,7 @@ export default function Kelas() {
 
   const handleDelete = async () => {
     fetchDELETE({
-      url: `${TEACHER_API_URL}/kelas?id=${deleteContent.id}`,
+      url: `${SHARED_API_URL}/kelas?id=${deleteContent.id}`,
       successMessage: "Berhasil menghapus kelas",
       onSuccess: onDeleteSuccess,
       setBtnLoading,
@@ -98,41 +98,41 @@ export default function Kelas() {
           btnOnClick={handleDelete}
         />
         <MainCard>
-          <Group position="apart">
+          <Group position="apart" mb="md">
             <Title>Daftar kelas milik anda</Title>
             <Button leftIcon={<IconPlus />} color="dark" onClick={handleCreate}>
               Buat kelas baru
             </Button>
           </Group>
+          {kelas?.data?.length === 0 ? (
+            <MainCard>
+              <NoData text="Anda tidak memiliki kelas" />
+            </MainCard>
+          ) : (
+            <Grid gutter="lg">
+              {kelas?.data?.map((item) => (
+                <Grid.Col md={6} lg={4} key={item.id}>
+                  <KelasCard
+                    dosen={item?.dosen?.user?.nama}
+                    komposisi_quiz={item?.komposisi_quiz}
+                    komposisi_tugas={item?.komposisi_tugas}
+                    komposisi_uts={item?.komposisi_uts}
+                    komposisi_uas={item?.komposisi_uas}
+                    nama={item?.nama}
+                    kode={item?.kode}
+                    canView
+                    canEdit
+                    canDelete
+                    onClickView={() => handleView({ item })}
+                    onClickEdit={() => handleEdit({ item })}
+                    onClickDelete={() => handleDeleteOpen({ item })}
+                    mahasiswaCount={item?._count?.Nilai}
+                  />
+                </Grid.Col>
+              ))}
+            </Grid>
+          )}
         </MainCard>
-        {kelas?.data?.length === 0 ? (
-          <MainCard>
-            <NoData text="Anda tidak memiliki kelas" />
-          </MainCard>
-        ) : (
-          <Grid gutter="lg">
-            {kelas?.data?.map((item) => (
-              <Grid.Col md={6} lg={4} key={item.id}>
-                <KelasCard
-                  dosen={item?.dosen?.user?.nama}
-                  komposisi_quiz={item?.komposisi_quiz}
-                  komposisi_tugas={item?.komposisi_tugas}
-                  komposisi_uts={item?.komposisi_uts}
-                  komposisi_uas={item?.komposisi_uas}
-                  nama={item?.nama}
-                  kode={item?.kode}
-                  canView
-                  canEdit
-                  canDelete
-                  onClickView={() => handleView({ item })}
-                  onClickEdit={() => handleEdit({ item })}
-                  onClickDelete={() => handleDeleteOpen({ item })}
-                  mahasiswaCount={item?._count?.Nilai}
-                />
-              </Grid.Col>
-            ))}
-          </Grid>
-        )}
         {isDev && <PrettyJSON json={kelas} />}
       </PageWrapper>
     )

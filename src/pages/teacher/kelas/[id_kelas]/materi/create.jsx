@@ -1,7 +1,7 @@
 import BaseRTE from "@/components/BaseRTE";
 import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import { fetchPOST } from "@/utils/crud";
 import isStringEmpty from "@/utils/validation/is-string-empty";
 import { Button, Group, Stack, TextInput, Title } from "@mantine/core";
@@ -42,7 +42,7 @@ export default function BuatMateri() {
         kelas_id: idKelas,
         file,
       },
-      url: `${TEACHER_API_URL}/materi`,
+      url: `${SHARED_API_URL}/materi`,
       successMessage: "Materi berhasil ditambahkan",
       onSuccess: handleBack,
       setBtnLoading,

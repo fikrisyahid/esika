@@ -22,7 +22,7 @@ export default function DetailMateri() {
   });
 
   const handleBack = () => {
-    router.push(`/teacher/kelas/${idKelas}`);
+    router.push(`/student/kelas/${idKelas}`);
   };
 
   const pageState = DataLoadCheck({
