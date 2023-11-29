@@ -1,15 +1,25 @@
 import BaseConfirmation from "@/components/BaseConfirmation";
+import BaseTable from "@/components/BaseTable";
 import MainCard from "@/components/MainCard";
 import NoData from "@/components/NoData";
 import PageWrapper from "@/components/PageWrapper";
 import PrettyJSON from "@/components/PrettyJSON";
+import AddStudentDialog from "@/components/kelas/AddStudentDialog";
 import MateriCard from "@/components/kelas/MateriCard";
 import { TEACHER_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchDELETE } from "@/utils/crud";
 import getDevStatus from "@/utils/get-dev-status";
 import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
-import { Button, Grid, Group, Text, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Flex,
+  Grid,
+  Group,
+  Text,
+  Title,
+} from "@mantine/core";
 import {
   IconAlertCircle,
   IconAlertTriangleFilled,
@@ -48,13 +58,20 @@ export default function DetailKelas() {
     url: `${TEACHER_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true&tugas=true`,
   });
 
+  const {
+    data: siswa,
+    isLoading: siswaLoading,
+    mutate: siswaMutate,
+  } = useFetchAPI({
+    url: `${TEACHER_API_URL}/mahasiswa?kelas_id=${idKelas}`,
+  });
+
   const [btnLoadingMateri, setBtnLoadingMateri] = useState(false);
   const [deleteMateriOpen, setDeleteMateriOpen] = useState(false);
   const [deleteMateriContent, setDeleteMateriContent] = useState({
     id: "",
     judul: "",
   });
-
   const handleDeleteMateriOpen = ({ item }) => {
     const { id, judul } = item;
     setDeleteMateriOpen(true);
@@ -64,29 +81,69 @@ export default function DetailKelas() {
     setDeleteMateriOpen(false);
     setDeleteMateriContent({ id: "", judul: "" });
   };
+  const onDeleteMateriSuccess = () => {
+    kelasMutate();
+    handleDeleteMateriClose();
+  };
   const handleDeleteMateri = async () => {
     fetchDELETE({
       url: `${TEACHER_API_URL}/materi?id=${deleteMateriContent.id}`,
       successMessage: "Materi berhasil dihapus",
-      onSuccess: () => {
-        kelasMutate();
-        handleDeleteMateriClose();
-      },
+      onSuccess: onDeleteMateriSuccess,
       setBtnLoading: setBtnLoadingMateri,
     });
   };
 
-  const handleCreateMahasiswa = () => {};
+  const [createMahasiswaOpen, setCreateMahasiswaOpen] = useState(false);
+  const handleCreateMahasiswaOpen = () => setCreateMahasiswaOpen(true);
+  const handleCreateMahasiswaClose = () => setCreateMahasiswaOpen(false);
   const handleCreateTugas = () => {};
 
+  const [btnLoadingSiswa, setBtnLoadingSiswa] = useState(false);
+  const [deleteSiswaOpen, setDeleteSiswaOpen] = useState(false);
+  const [deleteSiswaContent, setDeleteSiswaContent] = useState({
+    id: "",
+    nama: "",
+  });
+  const handleDeleteSiswaOpen = ({ item }) => {
+    const { id, nama } = item;
+    setDeleteSiswaContent({ id, nama });
+    setDeleteSiswaOpen(true);
+  };
+  const handleDeleteSiswaClose = () => {
+    setDeleteSiswaOpen(false);
+    setDeleteSiswaContent({ id: "", nama: "" });
+  };
+  const onDeleteSiswaSuccess = () => {
+    kelasMutate();
+    siswaMutate();
+    handleDeleteSiswaClose();
+  };
+  const handleDeleteSiswa = async () => {
+    fetchDELETE({
+      url: `${TEACHER_API_URL}/nilai?id=${deleteSiswaContent.id}`,
+      successMessage: "Mahasiswa berhasil dihapus",
+      onSuccess: onDeleteSiswaSuccess,
+      setBtnLoading: setBtnLoadingSiswa,
+    });
+  };
+
   const pageState = DataLoadCheck({
-    data: kelas,
-    isLoading: kelasLoading,
+    data: [kelas, siswa],
+    isLoading: [kelasLoading, siswaLoading],
   });
 
   return (
     pageState ?? (
       <PageWrapper pageTitle="Detail kelas">
+        <AddStudentDialog
+          open={createMahasiswaOpen}
+          onClose={handleCreateMahasiswaClose}
+          kelasId={idKelas}
+          kelasMutate={kelasMutate}
+          siswa={siswa}
+          siswaMutate={siswaMutate}
+        />
         <BaseConfirmation
           btnIcon={<IconTrash />}
           btnLoading={btnLoadingMateri}
@@ -101,6 +158,21 @@ export default function DetailKelas() {
           open={deleteMateriOpen}
           onClose={handleDeleteMateriClose}
           btnOnClick={handleDeleteMateri}
+        />
+        <BaseConfirmation
+          btnIcon={<IconTrash />}
+          btnLoading={btnLoadingSiswa}
+          btnText="Hapus siswa"
+          color="red"
+          title="Hati-hati!"
+          message={[
+            `Apakah kamu yakin ingin menghapus siswa ${deleteSiswaContent.nama} ?`,
+            `Semua data yang berhubungan dengan siswa ini akan terhapus juga.`,
+          ]}
+          icon={<IconAlertCircle />}
+          open={deleteSiswaOpen}
+          onClose={handleDeleteSiswaClose}
+          btnOnClick={handleDeleteSiswa}
         />
         <MainCard>
           <Group>
@@ -169,15 +241,47 @@ export default function DetailKelas() {
           <Group position="apart">
             <Text size={24}>Daftar Mahasiswa</Text>
             <Button
-              color="yellow"
-              leftIcon={<IconAlertTriangleFilled />}
-              onClick={handleCreateMahasiswa}
+              color="dark"
+              leftIcon={<IconPlus />}
+              onClick={handleCreateMahasiswaOpen}
             >
               Tambah mahasiswa
             </Button>
           </Group>
-          {kelas?.data?.Nilai?.length === 0 && (
+          {kelas?.data?.Nilai?.length === 0 ? (
             <NoData text="Kelas ini belum memiliki mahasiswa" />
+          ) : (
+            <BaseTable
+              columns={[
+                { accessor: "no", title: "No", textAlignment: "center" },
+                { accessor: "nim", title: "NIM" },
+                { accessor: "nama", title: "Nama" },
+                { accessor: "nilai", title: "Nilai", textAlignment: "center" },
+                {
+                  accessor: "actions",
+                  title: "Actions",
+                  textAlignment: "end",
+                  render: (values) => (
+                    <Flex justify="flex-end">
+                      <ActionIcon
+                        variant="filled"
+                        color="red"
+                        onClick={() => handleDeleteSiswaOpen({ item: values })}
+                      >
+                        <IconTrash />
+                      </ActionIcon>
+                    </Flex>
+                  ),
+                },
+              ]}
+              rows={kelas?.data?.Nilai?.map((item, index) => ({
+                no: index + 1,
+                id: item?.id,
+                nim: item?.mahasiswa?.NIM,
+                nama: item?.mahasiswa?.user?.nama,
+                nilai: item?.nilai,
+              }))}
+            />
           )}
         </MainCard>
         {isDev && <PrettyJSON json={kelas} />}

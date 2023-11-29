@@ -127,6 +127,7 @@ export default function Kelas() {
                   onClickView={() => handleView({ item })}
                   onClickEdit={() => handleEdit({ item })}
                   onClickDelete={() => handleDeleteOpen({ item })}
+                  mahasiswaCount={item?._count?.Nilai}
                 />
               </Grid.Col>
             ))}

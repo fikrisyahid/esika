@@ -33,7 +33,15 @@ export default async function handler(req, res) {
               },
             }),
             ...(mahasiswa && {
-              Nilai: true,
+              Nilai: {
+                include: {
+                  mahasiswa: {
+                    include: {
+                      user: true,
+                    },
+                  },
+                },
+              },
             }),
             ...(tugas && {
               Tugas: true,
@@ -56,6 +64,11 @@ export default async function handler(req, res) {
             dosen: {
               include: {
                 user: true,
+              },
+            },
+            _count: {
+              select: {
+                Nilai: true,
               },
             },
           },
