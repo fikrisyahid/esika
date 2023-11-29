@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Popover, Text } from "@mantine/core";
+import { ActionIcon, Flex, Popover, Text } from "@mantine/core";
 import {
   IconEdit,
   IconEye,
@@ -23,16 +23,16 @@ export default function MateriCard({
 
   return (
     <MainCard>
-      <Group position="apart" align="center">
-        <Group>
+      <Flex align="center" justify="space-between">
+        <Flex gap="sm">
           {no && (
             <Text size={18} style={{ fontWeight: "bold" }}>
               {no}.
             </Text>
           )}
           <Text size={18}>{judul}</Text>
-        </Group>
-        <Group>
+        </Flex>
+        <Flex gap="sm">
           <Popover
             width={400}
             position="bottom"
@@ -69,8 +69,8 @@ export default function MateriCard({
               <IconTrash />
             </ActionIcon>
           )}
-        </Group>
-      </Group>
+        </Flex>
+      </Flex>
     </MainCard>
   );
 }
