@@ -33,7 +33,15 @@ export default async function handler(req, res) {
               },
             }),
             ...(mahasiswa && {
-              Nilai: true,
+              Nilai: {
+                include: {
+                  mahasiswa: {
+                    include: {
+                      user: true,
+                    },
+                  },
+                },
+              },
             }),
             ...(tugas && {
               Tugas: true,
