@@ -18,14 +18,14 @@ import { useEffect, useState } from "react";
 export default function CreateKelas() {
   const router = useRouter();
 
-  const { id } = router.query;
+  const { id_kelas: idKelas } = router.query;
 
   const [btnLoading, setBtnLoading] = useState(false);
 
   const user = useAtomValue(profile);
 
   const { data: kelas, isLoading: kelasLoading } = useFetchAPI({
-    url: `${TEACHER_API_URL}/kelas?id=${id}`,
+    url: `${TEACHER_API_URL}/kelas?id=${idKelas}`,
   });
 
   const handleBack = () => {
@@ -72,7 +72,7 @@ export default function CreateKelas() {
 
   const handleCreateCourse = (values) => {
     fetchPUT({
-      url: `${TEACHER_API_URL}/kelas?id=${id}`,
+      url: `${TEACHER_API_URL}/kelas?id=${idKelas}`,
       body: {
         ...values,
         id: kelas?.data?.id,

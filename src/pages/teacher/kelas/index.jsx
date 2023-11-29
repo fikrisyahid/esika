@@ -45,12 +45,12 @@ export default function Kelas() {
 
   const handleEdit = ({ item }) => {
     const { id } = item;
-    router.push(`/teacher/kelas/edit/${id}`);
+    router.push(`/teacher/kelas/${id}/edit`);
   };
 
   const handleView = ({ item }) => {
     const { id } = item;
-    router.push(`/teacher/kelas/detail/${id}`);
+    router.push(`/teacher/kelas/${id}`);
   };
 
   const handleDeleteOpen = ({ item }) => {

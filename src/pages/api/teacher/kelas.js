@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === "GET") {
-      const { id, dosen_id: dosenId } = req.query;
+      const { id, materi, mahasiswa, dosen_id: dosenId } = req.query;
 
       if (id) {
         const result = await prisma.kelas.findUnique({
@@ -25,6 +25,12 @@ export default async function handler(req, res) {
           },
           include: {
             dosen: true,
+            ...(materi && {
+              Materi: true,
+            }),
+            ...(mahasiswa && {
+              Nilai: true,
+            }),
           },
         });
 
