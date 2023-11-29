@@ -1,3 +1,4 @@
+import { profile } from "@/atoms";
 import BaseConfirmation from "@/components/BaseConfirmation";
 import BaseTable from "@/components/BaseTable";
 import MainCard from "@/components/MainCard";
@@ -29,11 +30,14 @@ import {
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function DetailKelas() {
   const router = useRouter();
+
+  const user = useAtomValue(profile);
 
   const { isDev } = getDevStatus();
 
@@ -134,6 +138,23 @@ export default function DetailKelas() {
     data: [kelas, siswa],
     isLoading: [kelasLoading, siswaLoading],
   });
+
+  if (kelas?.status === "success" && kelas?.data?.dosenId !== user?.Dosen?.id) {
+    return (
+      <MainCard>
+        <Group>
+          <Button
+            color="dark"
+            leftIcon={<IconArrowLeft />}
+            onClick={handleBack}
+          >
+            Kembali
+          </Button>
+          <Title>Kamu tidak memiliki akses terhadap kelas ini</Title>
+        </Group>
+      </MainCard>
+    );
+  }
 
   return (
     pageState ?? (
