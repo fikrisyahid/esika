@@ -68,9 +68,10 @@ export default function DetailKelas() {
               {kelas?.data?.Materi?.length === 0 ? (
                 <NoData text="Kelas ini belum memiliki materi" />
               ) : (
-                kelas?.data?.Materi?.map((item) => (
+                kelas?.data?.Materi?.map((item, index) => (
                   <MateriCard
                     key={item.id}
+                    no={index + 1}
                     canDelete
                     canView
                     canEdit

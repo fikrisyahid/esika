@@ -3,6 +3,7 @@ import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
 import MainCard from "../MainCard";
 
 export default function MateriCard({
+  no,
   judul,
   canView,
   canEdit,
@@ -14,7 +15,14 @@ export default function MateriCard({
   return (
     <MainCard>
       <Group position="apart" align="center">
-        <Text size={18}>{judul}</Text>
+        <Group>
+          {no && (
+            <Text size={18} style={{ fontWeight: "bold" }}>
+              {no}.
+            </Text>
+          )}
+          <Text size={18}>{judul}</Text>
+        </Group>
         <Group>
           {canView && (
             <ActionIcon variant="filled" color="green" onClick={onClickView}>
