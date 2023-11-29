@@ -1,8 +1,10 @@
 import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
+import PrettyJSON from "@/components/PrettyJSON";
 import { ADMIN_API_URL, ADMIN_PAGE } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchPUT } from "@/utils/crud";
+import getDevStatus from "@/utils/get-dev-status";
 import getProfileImg from "@/utils/get-profile-img";
 import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
 import isStringEmpty from "@/utils/validation/is-string-empty";
@@ -23,6 +25,8 @@ import { useEffect, useState } from "react";
 
 export default function DetailUser() {
   const router = useRouter();
+
+  const { isDev } = getDevStatus();
 
   const { id } = router.query;
 
@@ -150,6 +154,7 @@ export default function DetailUser() {
               </form>
             </Grid.Col>
           </Grid>
+          {isDev && <PrettyJSON json={user} />}
         </MainCard>
       </PageWrapper>
     )
