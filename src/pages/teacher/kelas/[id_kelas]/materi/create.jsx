@@ -87,7 +87,10 @@ export default function BuatMateri() {
             <Title size={25} mt="sm">
               Konten materi
             </Title>
-            <BaseRTE setContent={setFile} />
+            <BaseRTE
+              content="Silahkan tulis materi di sini..."
+              setContent={setFile}
+            />
           </Stack>
         </form>
       </MainCard>

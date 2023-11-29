@@ -12,7 +12,12 @@ import { Button, Tooltip } from "@mantine/core";
 import { IconUpload } from "@tabler/icons-react";
 import ImageUpload from "./ImageUpload";
 
-export default function BaseRTE({ content, setContent }) {
+export default function BaseRTE({
+  content,
+  setContent,
+  contentUpdated,
+  setContentUpdated,
+}) {
   const [uploadImgOpen, setUploadImgOpen] = useState(false);
 
   const editor = useEditor({
@@ -26,16 +31,19 @@ export default function BaseRTE({ content, setContent }) {
       Image,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
-    content: content || "Start typing here...",
+    content,
   });
 
   editor?.on("update", () => setContent(editor.getHTML()));
 
   useEffect(() => {
-    if (editor) {
-      setContent(editor.getHTML());
+    if (editor && !contentUpdated) {
+      editor.commands.setContent(content);
+      if (setContentUpdated) {
+        setContentUpdated(true);
+      }
     }
-  }, [editor, setContent]);
+  }, [content, editor, contentUpdated, setContentUpdated]);
 
   const handleUploadImage = () => setUploadImgOpen(true);
   const handleCloseUploadImage = () => setUploadImgOpen(false);
