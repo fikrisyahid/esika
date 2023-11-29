@@ -10,7 +10,7 @@ export default function WorkInProgress() {
       radius="md"
       variant="filled"
     >
-      Mohon maaf konten masih dalam proses pengembangan
+      Mohon maaf konten masih dalam tahap pengembangan
     </Alert>
   );
 }
