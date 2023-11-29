@@ -39,9 +39,7 @@ export default function BaseRTE({
   useEffect(() => {
     if (editor && !contentUpdated) {
       editor.commands.setContent(content);
-      if (setContentUpdated) {
-        setContentUpdated(true);
-      }
+      setContentUpdated?.(true);
     }
   }, [content, editor, contentUpdated, setContentUpdated]);
 
