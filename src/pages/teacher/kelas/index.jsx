@@ -3,10 +3,12 @@ import BaseConfirmation from "@/components/BaseConfirmation";
 import MainCard from "@/components/MainCard";
 import NoData from "@/components/NoData";
 import PageWrapper from "@/components/PageWrapper";
+import PrettyJSON from "@/components/PrettyJSON";
 import KelasCard from "@/components/kelas/KelasCard";
 import { TEACHER_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchDELETE } from "@/utils/crud";
+import getDevStatus from "@/utils/get-dev-status";
 import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
 import { Button, Grid, Group, Title } from "@mantine/core";
 import { IconAlertCircle, IconPlus, IconTrash } from "@tabler/icons-react";
@@ -16,6 +18,8 @@ import { useState } from "react";
 
 export default function Kelas() {
   const router = useRouter();
+
+  const { isDev } = getDevStatus();
 
   const user = useAtomValue(profile);
 
@@ -41,7 +45,12 @@ export default function Kelas() {
 
   const handleEdit = ({ item }) => {
     const { id } = item;
-    router.push(`/teacher/kelas/edit/${id}`);
+    router.push(`/teacher/kelas/${id}/edit`);
+  };
+
+  const handleView = ({ item }) => {
+    const { id } = item;
+    router.push(`/teacher/kelas/${id}`);
   };
 
   const handleDeleteOpen = ({ item }) => {
@@ -115,15 +124,15 @@ export default function Kelas() {
                   canView
                   canEdit
                   canDelete
+                  onClickView={() => handleView({ item })}
                   onClickEdit={() => handleEdit({ item })}
-                  onClickDelete={() => {
-                    handleDeleteOpen({ item });
-                  }}
+                  onClickDelete={() => handleDeleteOpen({ item })}
                 />
               </Grid.Col>
             ))}
           </Grid>
         )}
+        {isDev && <PrettyJSON json={kelas} />}
       </PageWrapper>
     )
   );

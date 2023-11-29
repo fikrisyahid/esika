@@ -1,10 +1,10 @@
 const uploadImg = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "un6npijz");
+  formData.append("upload_preset", "c7sho6be");
   try {
     const res = await fetch(
-      "https://api.cloudinary.com/v1_1/duvryvmms/upload",
+      "https://api.cloudinary.com/v1_1/ddxzej8gq/upload",
       {
         method: "POST",
         body: formData,

@@ -3,9 +3,11 @@ import BaseConfirmation from "@/components/BaseConfirmation";
 import BaseTable from "@/components/BaseTable";
 import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
+import PrettyJSON from "@/components/PrettyJSON";
 import { ADMIN_API_URL, ADMIN_PAGE } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchDELETE } from "@/utils/crud";
+import getDevStatus from "@/utils/get-dev-status";
 import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
 import { ActionIcon, Badge, Button, Group, Title } from "@mantine/core";
 import {
@@ -20,6 +22,8 @@ import { useState } from "react";
 
 export default function Users() {
   const router = useRouter();
+
+  const { isDev } = getDevStatus();
 
   const currentUser = useAtomValue(profile);
 
@@ -178,6 +182,7 @@ export default function Users() {
                 : "Guest",
             }))}
           />
+          {isDev && <PrettyJSON json={users} />}
         </MainCard>
       </PageWrapper>
     )

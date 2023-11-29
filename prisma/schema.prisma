@@ -99,6 +99,8 @@ model Nilai {
   mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   mahasiswaId String
   nilai       Int
+  Kelas       Kelas?    @relation(fields: [kelasId], references: [id])
+  kelasId     String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -116,6 +118,7 @@ model Kelas {
   Materi          Materi[]
   Tugas           Tugas[]
   Ujian           Ujian[]
+  Nilai           Nilai[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
