@@ -1,11 +1,20 @@
-import { ActionIcon, Badge, Code, Group, Text, Title } from "@mantine/core";
-import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Badge,
+  Code,
+  Flex,
+  Group,
+  Text,
+  Title,
+} from "@mantine/core";
+import { IconEdit, IconEye, IconTrash, IconUsers } from "@tabler/icons-react";
 import MainCard from "../MainCard";
 
 export default function KelasCard({
   nama,
   dosen,
   kode,
+  mahasiswaCount,
   komposisi_tugas: komposisiTugas,
   komposisi_quiz: komposisiQuiz,
   komposisi_uts: komposisiUTS,
@@ -19,7 +28,14 @@ export default function KelasCard({
 }) {
   return (
     <MainCard>
-      <Title size={24}>{nama}</Title>
+      <Flex justify="space-between">
+        <Title size={24}>{nama}</Title>
+        <Flex>
+          <IconUsers />
+          <Text ml={5}>{mahasiswaCount}</Text>
+        </Flex>
+      </Flex>
+
       <Text>
         Kode: <Code fz="md">{kode}</Code>
       </Text>

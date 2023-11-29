@@ -66,6 +66,11 @@ export default async function handler(req, res) {
                 user: true,
               },
             },
+            _count: {
+              select: {
+                Nilai: true,
+              },
+            },
           },
         });
 
