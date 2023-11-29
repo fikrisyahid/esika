@@ -1,3 +1,4 @@
+import BaseConfirmation from "@/components/BaseConfirmation";
 import MainCard from "@/components/MainCard";
 import NoData from "@/components/NoData";
 import PageWrapper from "@/components/PageWrapper";
@@ -5,11 +6,18 @@ import PrettyJSON from "@/components/PrettyJSON";
 import MateriCard from "@/components/kelas/MateriCard";
 import { TEACHER_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
+import { fetchDELETE } from "@/utils/crud";
 import getDevStatus from "@/utils/get-dev-status";
 import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
 import { Button, Grid, Group, Text, Title } from "@mantine/core";
-import { IconArrowLeft, IconPlus } from "@tabler/icons-react";
+import {
+  IconAlertCircle,
+  IconArrowLeft,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function DetailKelas() {
   const router = useRouter();
@@ -21,16 +29,53 @@ export default function DetailKelas() {
   const handleBack = () => {
     router.push("/teacher/kelas");
   };
-
   const handleCreateMateri = () => {
     router.push(`/teacher/kelas/${idKelas}/materi/create`);
   };
+  const handleViewMateri = ({ id }) => {
+    router.push(`/teacher/kelas/${idKelas}/materi/${id}`);
+  };
+  const handleEditMateri = ({ id }) => {
+    router.push(`/teacher/kelas/${idKelas}/materi/${id}/edit`);
+  };
 
-  const handleCreateMahasiswa = () => {};
-
-  const { data: kelas, isLoading: kelasLoading } = useFetchAPI({
+  const {
+    data: kelas,
+    isLoading: kelasLoading,
+    mutate: kelasMutate,
+  } = useFetchAPI({
     url: `${TEACHER_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true`,
   });
+
+  const [btnLoadingMateri, setBtnLoadingMateri] = useState(false);
+  const [deleteMateriOpen, setDeleteMateriOpen] = useState(false);
+  const [deleteMateriContent, setDeleteMateriContent] = useState({
+    id: "",
+    judul: "",
+  });
+
+  const handleDeleteMateriOpen = ({ item }) => {
+    const { id, judul } = item;
+    setDeleteMateriOpen(true);
+    setDeleteMateriContent({ id, judul });
+  };
+  const handleDeleteMateriClose = () => {
+    setDeleteMateriOpen(false);
+    setDeleteMateriContent({ id: "", judul: "" });
+  };
+  const handleDeleteMateri = async () => {
+    fetchDELETE({
+      url: `${TEACHER_API_URL}/materi?id=${deleteMateriContent.id}`,
+      successMessage: "Materi berhasil dihapus",
+      onSuccess: () => {
+        kelasMutate();
+        handleDeleteMateriClose();
+      },
+      setBtnLoading: setBtnLoadingMateri,
+    });
+  };
+
+  const handleCreateMahasiswa = () => {};
 
   const pageState = DataLoadCheck({
     data: kelas,
@@ -40,6 +85,21 @@ export default function DetailKelas() {
   return (
     pageState ?? (
       <PageWrapper pageTitle="Detail kelas">
+        <BaseConfirmation
+          btnIcon={<IconTrash />}
+          btnLoading={btnLoadingMateri}
+          btnText="Hapus materi"
+          color="red"
+          title="Hati-hati!"
+          message={[
+            `Apakah kamu yakin ingin menghapus materi ${deleteMateriContent.judul} ?`,
+            `Semua data yang berhubungan dengan materi ini akan terhapus juga.`,
+          ]}
+          icon={<IconAlertCircle />}
+          open={deleteMateriOpen}
+          onClose={handleDeleteMateriClose}
+          btnOnClick={handleDeleteMateri}
+        />
         <MainCard>
           <Group>
             <Button
@@ -75,10 +135,11 @@ export default function DetailKelas() {
                     canDelete
                     canView
                     canEdit
-                    onClickDelete={() => {}}
-                    onClickEdit={() => {}}
-                    onClickView={() => {}}
+                    onClickDelete={() => handleDeleteMateriOpen({ item })}
+                    onClickEdit={() => handleEditMateri({ id: item.id })}
+                    onClickView={() => handleViewMateri({ id: item.id })}
                     judul={item.judul}
+                    deskripsi={item.deskripsi}
                   />
                 ))
               )}
