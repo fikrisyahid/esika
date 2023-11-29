@@ -1,7 +1,7 @@
 import { profile } from "@/atoms";
 import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import { fetchPOST } from "@/utils/crud";
 import formNumberChange from "@/utils/form/form-number-change";
 import isInRange from "@/utils/validation/in-range";
@@ -66,7 +66,7 @@ export default function CreateKelas() {
     }
 
     fetchPOST({
-      url: `${TEACHER_API_URL}/kelas`,
+      url: `${SHARED_API_URL}/kelas`,
       body: {
         ...values,
         dosen_id: user.Dosen.id,

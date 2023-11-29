@@ -2,7 +2,7 @@ import BaseRTE from "@/components/BaseRTE";
 import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
 import PrettyJSON from "@/components/PrettyJSON";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchPUT } from "@/utils/crud";
 import getDevStatus from "@/utils/get-dev-status";
@@ -30,7 +30,7 @@ export default function EditMateri() {
     isLoading: materiLoading,
     mutate: mutateMateri,
   } = useFetchAPI({
-    url: `${TEACHER_API_URL}/materi?id=${idMateri}`,
+    url: `${SHARED_API_URL}/materi?id=${idMateri}`,
   });
 
   const [file, setFile] = useState("");
@@ -73,7 +73,7 @@ export default function EditMateri() {
         id: idMateri,
         file,
       },
-      url: `${TEACHER_API_URL}/materi`,
+      url: `${SHARED_API_URL}/materi`,
       successMessage: "Materi berhasil diupdate",
       onSuccess: handleSuccessUpdate,
       setBtnLoading,

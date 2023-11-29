@@ -5,7 +5,7 @@ import NoData from "@/components/NoData";
 import PageWrapper from "@/components/PageWrapper";
 import PrettyJSON from "@/components/PrettyJSON";
 import KelasCard from "@/components/kelas/KelasCard";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchDELETE } from "@/utils/crud";
 import getDevStatus from "@/utils/get-dev-status";
@@ -36,7 +36,7 @@ export default function Kelas() {
     isLoading: kelasLoading,
     mutate: kelasMutate,
   } = useFetchAPI({
-    url: `${TEACHER_API_URL}/kelas?dosen_id=${user?.Dosen?.id}`,
+    url: `${SHARED_API_URL}/kelas?dosen_id=${user?.Dosen?.id}`,
   });
 
   const handleCreate = () => {
@@ -70,7 +70,7 @@ export default function Kelas() {
 
   const handleDelete = async () => {
     fetchDELETE({
-      url: `${TEACHER_API_URL}/kelas?id=${deleteContent.id}`,
+      url: `${SHARED_API_URL}/kelas?id=${deleteContent.id}`,
       successMessage: "Berhasil menghapus kelas",
       onSuccess: onDeleteSuccess,
       setBtnLoading,

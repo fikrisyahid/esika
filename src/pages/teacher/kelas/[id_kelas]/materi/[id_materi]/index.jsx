@@ -2,7 +2,7 @@ import BaseStringHTML from "@/components/BaseStringHTML";
 import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
 import PrettyJSON from "@/components/PrettyJSON";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import getDevStatus from "@/utils/get-dev-status";
 import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
@@ -18,7 +18,7 @@ export default function DetailMateri() {
   const { id_kelas: idKelas, id_materi: idMateri } = router.query;
 
   const { data: materi, isLoading: materiLoading } = useFetchAPI({
-    url: `${TEACHER_API_URL}/materi?id=${idMateri}`,
+    url: `${SHARED_API_URL}/materi?id=${idMateri}`,
   });
 
   const handleBack = () => {

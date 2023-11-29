@@ -1,10 +1,13 @@
+import MainCard from "@/components/MainCard";
 import PageWrapper from "@/components/PageWrapper";
-import WorkInProgress from "@/components/WorkInProgress";
+import { Title } from "@mantine/core";
 
 export default function Kelas() {
   return (
     <PageWrapper pageTitle="Kelas">
-      <WorkInProgress />
+      <MainCard>
+        <Title>Daftar kelas yang kamu ikuti</Title>
+      </MainCard>
     </PageWrapper>
   );
 }

@@ -8,7 +8,6 @@ export default async function handler(req, res) {
     req,
     res,
     method: ["GET", "POST", "DELETE", "PUT"],
-    roles: "dosen",
   });
   if (!allowed.pass) {
     return res.status(allowed.statusCode).json(allowed);

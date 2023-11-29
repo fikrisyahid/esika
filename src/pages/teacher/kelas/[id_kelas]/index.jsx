@@ -6,7 +6,7 @@ import PageWrapper from "@/components/PageWrapper";
 import PrettyJSON from "@/components/PrettyJSON";
 import AddStudentDialog from "@/components/kelas/AddStudentDialog";
 import MateriCard from "@/components/kelas/MateriCard";
-import { TEACHER_API_URL } from "@/configs";
+import { SHARED_API_URL } from "@/configs";
 import useFetchAPI from "@/hooks/useFetchAPI";
 import { fetchDELETE } from "@/utils/crud";
 import getDevStatus from "@/utils/get-dev-status";
@@ -55,7 +55,7 @@ export default function DetailKelas() {
     isLoading: kelasLoading,
     mutate: kelasMutate,
   } = useFetchAPI({
-    url: `${TEACHER_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true&tugas=true`,
+    url: `${SHARED_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true&tugas=true`,
   });
 
   const {
@@ -63,7 +63,7 @@ export default function DetailKelas() {
     isLoading: siswaLoading,
     mutate: siswaMutate,
   } = useFetchAPI({
-    url: `${TEACHER_API_URL}/mahasiswa?kelas_id=${idKelas}`,
+    url: `${SHARED_API_URL}/mahasiswa?kelas_id=${idKelas}`,
   });
 
   const [btnLoadingMateri, setBtnLoadingMateri] = useState(false);
@@ -87,7 +87,7 @@ export default function DetailKelas() {
   };
   const handleDeleteMateri = async () => {
     fetchDELETE({
-      url: `${TEACHER_API_URL}/materi?id=${deleteMateriContent.id}`,
+      url: `${SHARED_API_URL}/materi?id=${deleteMateriContent.id}`,
       successMessage: "Materi berhasil dihapus",
       onSuccess: onDeleteMateriSuccess,
       setBtnLoading: setBtnLoadingMateri,
@@ -121,7 +121,7 @@ export default function DetailKelas() {
   };
   const handleDeleteSiswa = async () => {
     fetchDELETE({
-      url: `${TEACHER_API_URL}/nilai?id=${deleteSiswaContent.id}`,
+      url: `${SHARED_API_URL}/nilai?id=${deleteSiswaContent.id}`,
       successMessage: "Mahasiswa berhasil dihapus",
       onSuccess: onDeleteSiswaSuccess,
       setBtnLoading: setBtnLoadingSiswa,
