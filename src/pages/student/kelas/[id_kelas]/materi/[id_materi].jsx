@@ -44,8 +44,6 @@ export default function DetailMateri() {
             </Button>
             <Title>Detail materi</Title>
           </Group>
-        </MainCard>
-        <MainCard>
           <Title size={28} mt="sm" align="center">
             {materi?.data?.judul}
           </Title>
