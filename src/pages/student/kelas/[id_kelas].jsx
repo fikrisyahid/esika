@@ -62,7 +62,6 @@ export default function DetailKelas() {
             <Title>Detail kelas</Title>
           </Group>
           <Title size={24}>{kelas?.data?.nama}</Title>
-
           <Text>
             Kode: <Code fz="md">{kelas?.data?.kode}</Code>
           </Text>
