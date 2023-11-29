@@ -1,4 +1,5 @@
 import MainCard from "@/components/MainCard";
+import NoData from "@/components/NoData";
 import PageWrapper from "@/components/PageWrapper";
 import PrettyJSON from "@/components/PrettyJSON";
 import MateriCard from "@/components/kelas/MateriCard";
@@ -22,8 +23,10 @@ export default function DetailKelas() {
   };
 
   const handleCreateMateri = () => {
-    router.push(`/teacher/kelas/detail/${idKelas}/materi/create`);
+    router.push(`/teacher/kelas/${idKelas}/materi/create`);
   };
+
+  const handleCreateMahasiswa = () => {};
 
   const { data: kelas, isLoading: kelasLoading } = useFetchAPI({
     url: `${TEACHER_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true`,
@@ -62,23 +65,39 @@ export default function DetailKelas() {
                   Tambah materi
                 </Button>
               </Group>
-              {kelas?.data?.Materi?.map((item) => (
-                <MateriCard
-                  key={item.id}
-                  canDelete
-                  canView
-                  canEdit
-                  onClickDelete={() => {}}
-                  onClickEdit={() => {}}
-                  onClickView={() => {}}
-                  judul={item.judul}
-                />
-              ))}
+              {kelas?.data?.Materi?.length === 0 ? (
+                <NoData text="Kelas ini belum memiliki materi" />
+              ) : (
+                kelas?.data?.Materi?.map((item) => (
+                  <MateriCard
+                    key={item.id}
+                    canDelete
+                    canView
+                    canEdit
+                    onClickDelete={() => {}}
+                    onClickEdit={() => {}}
+                    onClickView={() => {}}
+                    judul={item.judul}
+                  />
+                ))
+              )}
             </MainCard>
           </Grid.Col>
           <Grid.Col md={6}>
             <MainCard>
-              <Text size={24}>Daftar Mahasiswa</Text>
+              <Group position="apart">
+                <Text size={24}>Daftar Mahasiswa</Text>
+                <Button
+                  color="dark"
+                  leftIcon={<IconPlus />}
+                  onClick={handleCreateMahasiswa}
+                >
+                  Tambah mahasiswa
+                </Button>
+              </Group>
+              {kelas?.data?.Nilai?.length === 0 && (
+                <NoData text="Kelas ini belum memiliki mahasiswa" />
+              )}
             </MainCard>
           </Grid.Col>
         </Grid>

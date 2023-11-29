@@ -10,7 +10,7 @@ export default function DetailMateri() {
   const { id_kelas: idKelas } = router.query;
 
   const handleBack = () => {
-    router.push(`/teacher/kelas/detail/${idKelas}`);
+    router.push(`/teacher/kelas/${idKelas}`);
   };
 
   return (
