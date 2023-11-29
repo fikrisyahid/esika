@@ -8,6 +8,7 @@ import isInRange from "@/utils/validation/in-range";
 import isStringEmpty from "@/utils/validation/is-string-empty";
 import { Button, Flex, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 import { IconArrowLeft, IconPlus } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/router";
@@ -50,6 +51,20 @@ export default function CreateKelas() {
   });
 
   const handleCreateCourse = (values) => {
+    if (
+      parseInt(values.komposisi_quiz) +
+        parseInt(values.komposisi_tugas) +
+        parseInt(values.komposisi_uts) +
+        parseInt(values.komposisi_uas) !==
+      100
+    ) {
+      notifications.show({
+        message: "Komposisi nilai harus 100%",
+        color: "red",
+      });
+      return;
+    }
+
     fetchPOST({
       url: `${TEACHER_API_URL}/kelas`,
       body: {

@@ -1,9 +1,9 @@
 import {
   ActionIcon,
-  Badge,
   Code,
   Flex,
   Group,
+  Progress,
   Text,
   Title,
 } from "@mantine/core";
@@ -39,18 +39,41 @@ export default function KelasCard({
       <Text>
         Kode: <Code fz="md">{kode}</Code>
       </Text>
-      <Badge size="lg" color="blue">
-        Tugas: {komposisiTugas} %
-      </Badge>
-      <Badge size="lg" color="cyan">
-        Quiz: {komposisiQuiz} %
-      </Badge>
-      <Badge size="lg" color="grape">
-        UTS: {komposisiUTS} %
-      </Badge>
-      <Badge size="lg" color="green">
-        UAS: {komposisiUAS} %
-      </Badge>
+      <Progress
+        radius="xl"
+        size={24}
+        styles={{
+          label: {
+            fontSize: 10,
+          },
+        }}
+        sections={[
+          {
+            value: komposisiTugas,
+            color: "pink",
+            label: "Tugas",
+            tooltip: `Komposisi tugas - ${komposisiTugas} %`,
+          },
+          {
+            value: komposisiQuiz,
+            color: "green",
+            label: "Quiz",
+            tooltip: `Komposisi quiz - ${komposisiQuiz} %`,
+          },
+          {
+            value: komposisiUTS,
+            color: "violet",
+            label: "UTS",
+            tooltip: `Komposisi UTS - ${komposisiUTS} %`,
+          },
+          {
+            value: komposisiUAS,
+            color: "orange",
+            label: "UAS",
+            tooltip: `Komposisi UAS - ${komposisiUAS} %`,
+          },
+        ]}
+      />
       <Text>Dosen pengampu:</Text>
       <Group mt={-10} position="apart" align="center">
         <Text weight="bold">{dosen}</Text>
