@@ -80,7 +80,7 @@ export default function Kelas() {
                     komposisi_uas={item?.komposisi_uas}
                     nama={item?.nama}
                     kode={item?.kode}
-                    canView
+                    canAssign
                     onClickView={() => handleViewKelas({ id: item?.id })}
                     mahasiswaCount={item?._count?.Nilai}
                   />

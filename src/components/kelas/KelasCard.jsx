@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Button,
   Code,
   Flex,
   Group,
@@ -7,7 +8,13 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { IconEdit, IconEye, IconTrash, IconUsers } from "@tabler/icons-react";
+import {
+  IconAlertTriangleFilled,
+  IconEdit,
+  IconEye,
+  IconTrash,
+  IconUsers,
+} from "@tabler/icons-react";
 import MainCard from "../MainCard";
 
 export default function KelasCard({
@@ -22,6 +29,7 @@ export default function KelasCard({
   canView,
   canEdit,
   canDelete,
+  canAssign,
   onClickView,
   onClickEdit,
   onClickDelete,
@@ -82,6 +90,15 @@ export default function KelasCard({
             <ActionIcon variant="filled" color="green" onClick={onClickView}>
               <IconEye />
             </ActionIcon>
+          )}
+          {canAssign && (
+            <Button
+              size="sm"
+              color="yellow"
+              leftIcon={<IconAlertTriangleFilled />}
+            >
+              Ikut kelas
+            </Button>
           )}
           {canEdit && (
             <ActionIcon variant="filled" color="yellow" onClick={onClickEdit}>
