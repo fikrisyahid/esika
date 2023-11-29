@@ -12,6 +12,7 @@ import DataLoadCheck from "@/utils/react-component/DataLoadCheck";
 import { Button, Grid, Group, Text, Title } from "@mantine/core";
 import {
   IconAlertCircle,
+  IconAlertTriangleFilled,
   IconArrowLeft,
   IconPlus,
   IconTrash,
@@ -44,7 +45,7 @@ export default function DetailKelas() {
     isLoading: kelasLoading,
     mutate: kelasMutate,
   } = useFetchAPI({
-    url: `${TEACHER_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true`,
+    url: `${TEACHER_API_URL}/kelas?id=${idKelas}&materi=true&mahasiswa=true&tugas=true`,
   });
 
   const [btnLoadingMateri, setBtnLoadingMateri] = useState(false);
@@ -76,6 +77,7 @@ export default function DetailKelas() {
   };
 
   const handleCreateMahasiswa = () => {};
+  const handleCreateTugas = () => {};
 
   const pageState = DataLoadCheck({
     data: kelas,
@@ -148,21 +150,36 @@ export default function DetailKelas() {
           <Grid.Col md={6}>
             <MainCard>
               <Group position="apart">
-                <Text size={24}>Daftar Mahasiswa</Text>
+                <Text size={24}>Daftar Tugas</Text>
                 <Button
-                  color="dark"
-                  leftIcon={<IconPlus />}
-                  onClick={handleCreateMahasiswa}
+                  color="yellow"
+                  leftIcon={<IconAlertTriangleFilled />}
+                  onClick={handleCreateTugas}
                 >
-                  Tambah mahasiswa
+                  Tambah tugas
                 </Button>
               </Group>
-              {kelas?.data?.Nilai?.length === 0 && (
-                <NoData text="Kelas ini belum memiliki mahasiswa" />
+              {kelas?.data?.Tugas?.length === 0 && (
+                <NoData text="Kelas ini belum memiliki tugas" />
               )}
             </MainCard>
           </Grid.Col>
         </Grid>
+        <MainCard>
+          <Group position="apart">
+            <Text size={24}>Daftar Mahasiswa</Text>
+            <Button
+              color="yellow"
+              leftIcon={<IconAlertTriangleFilled />}
+              onClick={handleCreateMahasiswa}
+            >
+              Tambah mahasiswa
+            </Button>
+          </Group>
+          {kelas?.data?.Nilai?.length === 0 && (
+            <NoData text="Kelas ini belum memiliki mahasiswa" />
+          )}
+        </MainCard>
         {isDev && <PrettyJSON json={kelas} />}
       </PageWrapper>
     )
