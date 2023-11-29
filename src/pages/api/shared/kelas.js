@@ -15,7 +15,14 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === "GET") {
-      const { id, materi, mahasiswa, tugas, dosen_id: dosenId } = req.query;
+      const {
+        id,
+        materi,
+        mahasiswa,
+        tugas,
+        dosen_id: dosenId,
+        mahasiswa_id: mahasiswaId,
+      } = req.query;
 
       if (id) {
         const result = await prisma.kelas.findUnique({
@@ -23,7 +30,11 @@ export default async function handler(req, res) {
             id,
           },
           include: {
-            dosen: true,
+            dosen: {
+              include: {
+                user: true,
+              },
+            },
             ...(materi && {
               Materi: {
                 orderBy: {
@@ -51,6 +62,7 @@ export default async function handler(req, res) {
         return SUCCESS_RESPONSE({
           res,
           data: result,
+          message: "successfully get kelas",
         });
       }
 
@@ -76,6 +88,37 @@ export default async function handler(req, res) {
         return SUCCESS_RESPONSE({
           res,
           data: result,
+          message: "successfully get kelas",
+        });
+      }
+
+      if (mahasiswaId) {
+        const result = await prisma.kelas.findMany({
+          where: {
+            Nilai: {
+              some: {
+                mahasiswaId,
+              },
+            },
+          },
+          include: {
+            dosen: {
+              include: {
+                user: true,
+              },
+            },
+            _count: {
+              select: {
+                Nilai: true,
+              },
+            },
+          },
+        });
+
+        return SUCCESS_RESPONSE({
+          res,
+          data: result,
+          message: "successfully get kelas",
         });
       }
 
